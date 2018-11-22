@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<script>
+    (function(){
+        if(''){
+            if (prompt('请输入文章密码') !== ''){
+                alert('密码错误');
+                history.back();
+            }
+        }
+    })();
+</script>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="计算机网络," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1968-1972:早期 ARPANET 验证了分组交换网络的有效性。 1972-1980: 越来越多的科研机构接入到ARPAnet,开始尝试解决多个不同网络的互连问题。 1973，提出解决网络互联问题的第一个思路，传输控制程序。 1973 – 1977，唯一的传输控制程序需要解决的问题很多：异构网络上的可靠传输问题、分组交换的路由问题、差错检测问题、…… 1978-1980，形成TCP/IP协议">
+<meta name="keywords" content="计算机网络">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机网络复习（二）">
+<meta property="og:url" content="http://yoursite.com/com-net2/index.html">
+<meta property="og:site_name" content="Coolguyinhust">
+<meta property="og:description" content="1968-1972:早期 ARPANET 验证了分组交换网络的有效性。 1972-1980: 越来越多的科研机构接入到ARPAnet,开始尝试解决多个不同网络的互连问题。 1973，提出解决网络互联问题的第一个思路，传输控制程序。 1973 – 1977，唯一的传输控制程序需要解决的问题很多：异构网络上的可靠传输问题、分组交换的路由问题、差错检测问题、…… 1978-1980，形成TCP/IP协议">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/com-net2/a1.png">
+<meta property="og:image" content="http://yoursite.com/com-net2/a2.png">
+<meta property="og:image" content="http://yoursite.com/com-net2/a3.png">
+<meta property="og:image" content="http://yoursite.com/com-net2/a4.png">
+<meta property="og:image" content="http://yoursite.com/com-net2/a5.png">
+<meta property="og:image" content="http://yoursite.com/com-net2/a6.png">
+<meta property="og:image" content="http://yoursite.com/com-net2/a7.png">
+<meta property="og:image" content="http://yoursite.com/com-net2/a8.png">
+<meta property="og:image" content="http://yoursite.com/com-net2/a9.png">
+<meta property="og:image" content="http://yoursite.com/com-net2/a10.png">
+<meta property="og:image" content="http://yoursite.com/com-net2/a11.png">
+<meta property="og:image" content="http://yoursite.com/com-net2/a12.png">
+<meta property="og:image" content="http://yoursite.com/com-net2/a13.png">
+<meta property="og:image" content="http://yoursite.com/com-net2/a14.png">
+<meta property="og:image" content="http://yoursite.com/com-net2/a15.png">
+<meta property="og:image" content="http://yoursite.com/com-net2/a16.png">
+<meta property="og:updated_time" content="2018-11-22T12:36:44.154Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="计算机网络复习（二）">
+<meta name="twitter:description" content="1968-1972:早期 ARPANET 验证了分组交换网络的有效性。 1972-1980: 越来越多的科研机构接入到ARPAnet,开始尝试解决多个不同网络的互连问题。 1973，提出解决网络互联问题的第一个思路，传输控制程序。 1973 – 1977，唯一的传输控制程序需要解决的问题很多：异构网络上的可靠传输问题、分组交换的路由问题、差错检测问题、…… 1978-1980，形成TCP/IP协议">
+<meta name="twitter:image" content="http://yoursite.com/com-net2/a1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/com-net2/"/>
+
+
+
+
+
+  <title>计算机网络复习（二） | Coolguyinhust</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Coolguyinhust</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">KaiXin</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/com-net2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="KaiXin Xiong">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/img/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coolguyinhust">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">计算机网络复习（二）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-12T21:09:22+08:00">
+                2018-11-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>1968-1972:早期 ARPANET 验证了分组交换网络的有效性。</p>
+<p>1972-1980: 越来越多的科研机构接入到ARPAnet,开始尝试解决多个不同网络的互连问题。</p>
+<p>1973，提出解决网络互联问题的第一个思路，传输控制程序。</p>
+<p>1973 – 1977，唯一的传输控制程序需要解决的问题很多：异构网络上的可靠传输问题、分组交换的路由问题、差错检测问题、……</p>
+<p>1978-1980，形成TCP/IP协议族。</p>
+<p>1980s， TCP/IP协议族被ARPNET正式采纳。</p>
+<h2 id="IP服务模型"><a href="#IP服务模型" class="headerlink" title="IP服务模型"></a>IP服务模型</h2><p>采用数据报交换，每个分组自描述源/目的地址，沿途的路由器根据<strong>转发表</strong>转发分组；</p>
+<h3 id="IP分组设计"><a href="#IP分组设计" class="headerlink" title="IP分组设计"></a>IP分组设计</h3><p>分组的分段与组装： <strong>（分段重组由目的主机完成）</strong><br>问题：不同的网络存在不同的MTUs，最大传输单元(MTU, Maximum Transmission Unit )， 网络能够承载的最大的分组/数据帧。</p>
+<img src="/com-net2/a1.png">
+<p>层次化的IP地址划分 :</p>
+<img src="/com-net2/a2.png">
+<h4 id="IP地址的表示"><a href="#IP地址的表示" class="headerlink" title="IP地址的表示"></a>IP地址的表示</h4><p>IP地址与掩码相与即获得其网络地址;</p>
+<p>每个网段内，主机部分全为0的地址为网络地址(network address)，约定每个网段内主机部分全为1的地址为广播地址(broadcast address).</p>
+<h3 id="IP路由器"><a href="#IP路由器" class="headerlink" title="IP路由器"></a>IP路由器</h3><p>IP路由器的两大核心功能：</p>
+<ul>
+<li>转发: 将路由器输入端口收到的分组从正确的输出端口发送出去</li>
+<li>路由选择: 决定分组从源节点到达目的节点的路径路由选择算法</li>
+</ul>
+<p>转发(数据平面)：获得一个分组, 查看其目的地址, 查询本地转发表, 将分组从输出端口发送出去</p>
+<p>路由选择(控制平面)：转发表的构建通常由基于复杂分布式算法的路由协议完成</p>
+<img src="/com-net2/a3.png">
+<p>路由器周期性交互拓扑信息，通过路由算法构造路由表<br>路由表格式: &lt;网络号, 下一跳&gt;，<strong>路由表构造转发表</strong></p>
+<p>转发表格式: &lt;网络号, 下一跳, 输出端口号&gt;</p>
+<p>（下面这个路由表其实包含了转发表的内容）</p>
+<img src="/com-net2/a4.png">
+<p>ARP：从IP地址到MAC地址的映射。</p>
+<h3 id="子网划分"><a href="#子网划分" class="headerlink" title="子网划分"></a>子网划分</h3><p>传统A/B/C类网络地址划分基础上引入的新层次，同一个网络号的网段地址可以分为若干个子网。</p>
+<p>子网掩码的1的位数是（网络号 + 子网号）的位数，0的位数是主机号的位数。</p>
+<p>IP地址 与运算  子网掩码   =  子网地址（子网的网络号）</p>
+<p>子网中不是所有的地址都可以作为主机地址：</p>
+<ul>
+<li>子网网络地址 (主机部分全0)</li>
+<li>子网广播地址 (主机部分全1)</li>
+<li>子网默认网关地址（缺省路由器地址）</li>
+</ul>
+<h3 id="CIDR"><a href="#CIDR" class="headerlink" title="CIDR"></a>CIDR</h3><p>例：校园网地址 200.24.16.0/20</p>
+<p>​    电信系地址 200.24.16.0/23</p>
+<p>就叫可变长的子网掩码，（网络号/子网掩码）</p>
+<p>将两个或者多个子网组合起来，在路由表中形成单一路由记录的方法，又称为路由聚合或路由汇总。</p>
+<p>最长前缀匹配准则(Longest Prefix Match)：当路由表中有多条条目可以匹配目的IP时，一般就采用掩码最长的一条作为匹配项并确定下一跳。</p>
+<h3 id="DHCP"><a href="#DHCP" class="headerlink" title="DHCP"></a>DHCP</h3><p>自动为主机分配 IP的需求。</p>
+<p>动态主机配置协议</p>
+<h3 id="ICMP"><a href="#ICMP" class="headerlink" title="ICMP"></a>ICMP</h3><p>互联网控制消息协议</p>
+<p>ping: 测试网络上某个主机是否可达的网络调试工具.</p>
+<p>Ping 发 送一个 ICMP 回声请求 (type 8, code 0)消息给目的地，并报告是否收到所希望的 ICMP 回声应答</p>
+<h3 id="路由"><a href="#路由" class="headerlink" title="路由"></a>路由</h3><p>路由选择算法： <strong>生成</strong>路由表，为路由器转发IP分组找出适当的<strong>下一跳路由器。</strong></p>
+<p>路由选择协议：实现路由表中路由<strong>信息的动态更新</strong>，收到报文的操作…</p>
+<p>自治系统：（AS）一个自治系统内部路由器之间能够使用动态的路由选择协议，及时地交换路由信息，精确地反映自治系统网络拓扑的当前状态。</p>
+<p>自治系统内部的路由选择称为域内路由选择(intra-domain routing)；自治系统之间的路由选择称为域间路由选择(inter-domain routing)。</p>
+<p>路由选择<strong>协议</strong>也分为两大类： 内部网关协议（IGP, Interior Gateway Protocol）、外部网关协议（EGP, Exterior Gateway Protocol）。</p>
+<h4 id="IGP"><a href="#IGP" class="headerlink" title="IGP"></a>IGP</h4><p>路由选择本质上是图论中寻找两个节点之间较低成本的路径的问题。</p>
+<p>以路由器角色运行最短路径算法。</p>
+<ol>
+<li>获取拓扑</li>
+<li>计算路由</li>
+</ol>
+<h5 id="距离向量（RIP）"><a href="#距离向量（RIP）" class="headerlink" title="距离向量（RIP）"></a>距离向量（RIP）</h5><p>基于Bellman-Ford 算法：两两交换信息，根据接收到的信息更新到各节点的最短路径</p>
+<p>每个节点与相邻节点交换当前自己到所有节点的距离；</p>
+<img src="/com-net2/a5.png">
+<p>初始路由信息：</p>
+<p>A: (0, 1, 1, ∞, 1, 1, ∞)     B: (1, 0, 1, ∞, ∞, ∞, ∞)<br>C: (1, 1, 0, 1, ∞, ∞, ∞)     E: (1, ∞, ∞, ∞, 0, ∞, ∞)<br>F: (1, ∞, ∞, ∞, ∞, 0, 1)</p>
+<p>B收到A的距离向量A: (0, 1, 1, ∞, 1, 1, ∞) 则更新自己的为 </p>
+<p>B: (1, 0, 1, ∞, 2, 2, ∞)</p>
+<p>……</p>
+<p>我们默认B收到A消息的同时，A会收到B的消息；且B几乎同时收到C D E F G的消息；（先后存在细微差别）</p>
+<p>路由信息协议(RIP, Routing Information Protocol)</p>
+<p>最大15跳；路由器通告到达网络的代价, 而不是到达其他路由器的代价</p>
+<h5 id="链路状态-OSPF"><a href="#链路状态-OSPF" class="headerlink" title="链路状态(OSPF)"></a>链路状态(OSPF)</h5><p>每个节点洪泛（告诉所有节点）自己邻接点的消息。</p>
+<p>OSPF协议，类似车载导航系统，将每条道路都收集到自己的数据库里。当计算A到C的最短路时，有以下选择：</p>
+<p>A——–B————C</p>
+<p>A——-D————E——–C</p>
+<p>A———–B———–E———C</p>
+<p>第一条路径最短，优先选择。如果遇到中途B严重堵车，可以提前切换到京沪高速，提高通行的效率。</p>
+<p>OSPF比RIP强大的地方是，OSPF对整网的拓扑结构了如指掌，一旦某一条路径断了，可以及时选择备份链路，对通信的影响小。</p>
+<p>那么OSPF又是怎样怎样得到A到C的航线的呢？</p>
+<p>A会搜寻A自身的邻接点，搜到B，B又会把自身的邻接点信息广播出去，A就会收到。</p>
+<p>相当于每个都手握一张残缺地图的部分，大家聚在一起，把各自的部分拼在一起就得到了所有路径！</p>
+<p>官方说法：每个节点告诉所有其他节点与之直接相连的链路状态，通过Dijkstra算法计算路由。</p>
+<p>开放最短路径优先路由协议：</p>
+<p>链路状态报文LSP：</p>
+<p>链路状态通告 (Link State Advertisement, LSA)<br>与该节点直接相邻的节点信息列表 &lt;AdjacentNode, Cost&gt;, 其中包括到这些邻节点的链路代价<br>一个链路状态报文可能包含多个LSAs</p>
+<h4 id="EGP"><a href="#EGP" class="headerlink" title="EGP"></a>EGP</h4><p>域内路由选择协议又称为内部网关协议 (Interior Gateway Protocol, IGP), 例如 OSPF, RIP</p>
+<p>域间路由协议又称为外部网关协议 (Exterior Gateway Protocol, EGP), 例如 BGP。</p>
+<p>核心思想: 向邻居网络通告整个路径而不是距离向量，各网络根据收到的路径向量更新自己的路由并且向其它网络转发</p>
+<p>路径向量: 发送到每一个目的网络的路径向量。</p>
+<img src="/com-net2/a6.png">
+<h5 id="边界网关协议（BGP）"><a href="#边界网关协议（BGP）" class="headerlink" title="边界网关协议（BGP）"></a>边界网关协议（BGP）</h5><p>BGP “发言人”路由器<br>在AS的边界负责向其它AS转发路径的路由器，每个AS至少有一个BGP“发言人”(Speaker)。</p>
+<p>BGP会话</p>
+<p>两个BGP发言人之间建立<strong>基于TCP的可靠传输</strong></p>
+<p>如果路径<strong>变化不大</strong>，则发送<strong>keep alive</strong>消息</p>
+<p>如果路径发生了变化，则发送撤销<strong>withdrawn</strong>消息</p>
+<p>更新路径信息时，采用增量更新的策略;</p>
+<h3 id="IPV6"><a href="#IPV6" class="headerlink" title="IPV6"></a>IPV6</h3><p>兼容IPv4的IPv6地址: IPv4-compatible IPv6 address</p>
+<img src="/com-net2/a7.png">
+<p>例如：</p>
+<p>47CD:1358:0000:0000:0000:0000:6479:DAEF</p>
+<p>47CD:1358::6479:DAEF</p>
+<p>::202.114.0.242</p>
+<h2 id="端到端协议"><a href="#端到端协议" class="headerlink" title="端到端协议"></a>端到端协议</h2><p>挑战：把底层网络低于要求的特性转变成为应用程序所需的高级服务</p>
+<img src="/com-net2/a8.png">
+<h3 id="用户数据报协议-UDP"><a href="#用户数据报协议-UDP" class="headerlink" title="用户数据报协议(UDP)"></a>用户数据报协议(UDP)</h3><ul>
+<li>仅在IP基础上增加了一级解多路复用功能</li>
+<li>无连接</li>
+<li>不保证消息的可靠传送</li>
+</ul>
+<p>字段：</p>
+<ul>
+<li><p>源端口和目的端口: <strong>识别应用进程</strong></p>
+</li>
+<li><p>校验和: 选项, 计算整个报文和伪首部</p>
+</li>
+</ul>
+<img src="/com-net2/a9.png">
+<p>UDP的解多路复用：</p>
+<img src="/com-net2/a10.png">
+<h3 id="可靠的字节流-TCP"><a href="#可靠的字节流-TCP" class="headerlink" title="可靠的字节流(TCP)"></a>可靠的字节流(TCP)</h3><h4 id="设计理念"><a href="#设计理念" class="headerlink" title="设计理念"></a>设计理念</h4><p>TCP想要解决的问题：IP提供的是不可靠的传输，可能丢包，超时，乱序…</p>
+<p>提供可靠传输的两个基本机制:<br>(1) ACK (确认)     (2) 超时定时器</p>
+<p>TCP采用<strong>改进的滑动窗口算法</strong>实现</p>
+<ul>
+<li>保证数据的可靠传送</li>
+<li>确保数据的有序传送</li>
+<li>流量控制(基于变化的AdvertisedWindow字段)</li>
+</ul>
+<h4 id="数据包格式（首部）"><a href="#数据包格式（首部）" class="headerlink" title="数据包格式（首部）"></a>数据包格式（首部）</h4><p>TCP不区分应用进程写入报文的边界, 采用<strong>数据段</strong>(Segment)为单位进行数据传输。</p>
+<p>TCP首部：<img src="/com-net2/a11.png"></p>
+<p>标志位：（0或1）</p>
+<p><strong>SYN</strong>, FIN – 建立/终止TCP会话连接；</p>
+<p><strong>ACK</strong> – 有效回复时置为1</p>
+<hr>
+<p>Seq: 发送的第一个字节序号</p>
+<p>Ack: 期望收到的下一个字节的序号</p>
+<p>AdWin: 接收方通知发送方的窗口大小</p>
+<h4 id="连接建立与终止"><a href="#连接建立与终止" class="headerlink" title="连接建立与终止"></a>连接建立与终止</h4><img src="/com-net2/a12.png">
+<p>三次握手建立连接<br>​    client发送连接建立请求(SYN=1,Seq=x) 至server<br>​    Server回复确认Client前序请求(ACK=1,Ack=x+1)，同时请求(SYN=1,Seq=y)<br>​    Client回复确认Server前序请求(ACK=1,ACK=y+1)</p>
+<img src="/com-net2/a13.png">
+<p>四次握手断开连接Four-Way Wavehand<br>​    Client发送连接断开请求(FIN=1,Seq=u) 至server<br>​    Server回复确认client请求(ACK=1,Ack=u+1)，同时<strong>继续发送待传输</strong>数据(Seq=v)<br>​    Server等待上层应用数据传输完毕之后，Server重复确认前序请求(ACK=1,Ack=u+1)，同时发送连接断开请求</p>
+<p>​    （FIN=1,Seq=w)<br>​    Client回复确认server请求(ACK=1,ACK=w+1,Seq=u+1)，继续等待2MSL时间后关闭</p>
+<h4 id="TCP滑动窗口算法"><a href="#TCP滑动窗口算法" class="headerlink" title="TCP滑动窗口算法"></a>TCP滑动窗口算法</h4><img src="/com-net2/a14.png">
+<p><strong>防止回绕</strong>：序号空间的大小是窗口空间大小的2倍；</p>
+<p>然而, 分组的生命周期可能很长，于是引入MSL( Maximum Segment Lifetime)；</p>
+<p><strong>保持管道满载</strong>：发送方的窗口大小大于时延带宽积</p>
+<h4 id="拥塞控制"><a href="#拥塞控制" class="headerlink" title="拥塞控制"></a>拥塞控制</h4><p>如何检测网络的拥塞?        以超时作为网络拥塞的标志。<br>如何调整发送速率?        TCP维护一个Congestion Window(cwnd)变量。</p>
+<p>TCP的发送方维护一个拥塞窗口cwnd，实际发送窗口不得超过cwnd。</p>
+<p>网络拥塞时(分段传输超时)，cwnd减小；网络未拥塞时(分段成功传送)，cwnd增大。</p>
+<h5 id="接收窗口vs-拥塞窗口："><a href="#接收窗口vs-拥塞窗口：" class="headerlink" title="接收窗口vs. 拥塞窗口："></a>接收窗口vs. 拥塞窗口：</h5><p>接收窗口rwnd的描述单位是报文段中的字节序号(seq)；</p>
+<p>拥塞窗口cwnd的描述单位是报文段的个数(segment)；</p>
+<h5 id="慢启动"><a href="#慢启动" class="headerlink" title="慢启动"></a>慢启动</h5><p>初始窗口值偏大，容易形成突发流量导致拥塞，需要设计一种机制控制窗口启动阶段的cwnd。</p>
+<ul>
+<li>TCP初始启动时，设置拥塞窗口cwnd为1</li>
+<li>慢启动阶段：以指数方式增加cwnd直到特定门限值ssthresh（ssthresh:slow start threshold）</li>
+<li>拥塞避免阶段：超过ssthresh后，cwnd加性增加；再次拥塞时，<strong>ssthresh值</strong>减半，重新进入慢启动阶段。</li>
+</ul>
+<img src="/com-net2/a15.png">
+<p>有时不是超时而是丢包，这种情况可以通过三次ACK确认，此时网络没有严重拥塞，检测到3次重复ACK后，不必等待超时计时器（快速重传），也没有必要进行慢启动（快速恢复），可以直接立即发起重传。</p>
+<img src="/com-net2/a16.png">
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/计算机网络/" rel="tag"># 计算机网络</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/thunderllea/" rel="next" title="thunderllea">
+                <i class="fa fa-chevron-left"></i> thunderllea
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/algorand/" rel="prev" title="algorand">
+                algorand <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/img/avatar.jpg"
+                alt="KaiXin Xiong" />
+            
+              <p class="site-author-name" itemprop="name">KaiXin Xiong</p>
+              <p class="site-description motion-element" itemprop="description">know my way ,then do my wishes!</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/coolguyinhust" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="coolguyinhust6699@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/SoP_KaiXinHaHa/" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i>CSDN</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#IP服务模型"><span class="nav-number">1.</span> <span class="nav-text">IP服务模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#IP分组设计"><span class="nav-number">1.1.</span> <span class="nav-text">IP分组设计</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#IP地址的表示"><span class="nav-number">1.1.1.</span> <span class="nav-text">IP地址的表示</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IP路由器"><span class="nav-number">1.2.</span> <span class="nav-text">IP路由器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#子网划分"><span class="nav-number">1.3.</span> <span class="nav-text">子网划分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CIDR"><span class="nav-number">1.4.</span> <span class="nav-text">CIDR</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DHCP"><span class="nav-number">1.5.</span> <span class="nav-text">DHCP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ICMP"><span class="nav-number">1.6.</span> <span class="nav-text">ICMP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#路由"><span class="nav-number">1.7.</span> <span class="nav-text">路由</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#IGP"><span class="nav-number">1.7.1.</span> <span class="nav-text">IGP</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#距离向量（RIP）"><span class="nav-number">1.7.1.1.</span> <span class="nav-text">距离向量（RIP）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#链路状态-OSPF"><span class="nav-number">1.7.1.2.</span> <span class="nav-text">链路状态(OSPF)</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#EGP"><span class="nav-number">1.7.2.</span> <span class="nav-text">EGP</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#边界网关协议（BGP）"><span class="nav-number">1.7.2.1.</span> <span class="nav-text">边界网关协议（BGP）</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IPV6"><span class="nav-number">1.8.</span> <span class="nav-text">IPV6</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#端到端协议"><span class="nav-number">2.</span> <span class="nav-text">端到端协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#用户数据报协议-UDP"><span class="nav-number">2.1.</span> <span class="nav-text">用户数据报协议(UDP)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可靠的字节流-TCP"><span class="nav-number">2.2.</span> <span class="nav-text">可靠的字节流(TCP)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#设计理念"><span class="nav-number">2.2.1.</span> <span class="nav-text">设计理念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据包格式（首部）"><span class="nav-number">2.2.2.</span> <span class="nav-text">数据包格式（首部）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#连接建立与终止"><span class="nav-number">2.2.3.</span> <span class="nav-text">连接建立与终止</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TCP滑动窗口算法"><span class="nav-number">2.2.4.</span> <span class="nav-text">TCP滑动窗口算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#拥塞控制"><span class="nav-number">2.2.5.</span> <span class="nav-text">拥塞控制</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#接收窗口vs-拥塞窗口："><span class="nav-number">2.2.5.1.</span> <span class="nav-text">接收窗口vs. 拥塞窗口：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#慢启动"><span class="nav-number">2.2.5.2.</span> <span class="nav-text">慢启动</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">KaiXin Xiong</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+	<div class="powered-by">
+	<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+	  本站访客数: <span id="busuanzi_value_site_uv"></span>
+	</span>
+	</div>
+  <span class="post-meta-divider">  | </span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共31.1k字</span>
+</div>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+	
+		<script type="text/javascript"
+		color="0,0,255" opacity='0.7' zIndex="-2" count="99" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+	
+</body>
+</html>

@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<script>
+    (function(){
+        if(''){
+            if (prompt('请输入文章密码') !== ''){
+                alert('密码错误');
+                history.back();
+            }
+        }
+    })();
+</script>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="paper," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前言： 主要调研reputation能在consensus中起到的积极的作用。主要参考自Guru。Guru能让普通的bft算法的恶意节点达到1/2左右，比传统的1/3高出了许多。 我们想探究清楚的问题有两个： reputation能对共识起到怎样的作用？ reputation在共识中是如何起作用的？即reputation的机制是怎样建立的？ Guru: Universal Reputation M">
+<meta name="keywords" content="paper">
+<meta property="og:type" content="article">
+<meta property="og:title" content="reputation for consensus">
+<meta property="og:url" content="http://yoursite.com/reputation-for-consensus/index.html">
+<meta property="og:site_name" content="Coolguyinhust">
+<meta property="og:description" content="前言： 主要调研reputation能在consensus中起到的积极的作用。主要参考自Guru。Guru能让普通的bft算法的恶意节点达到1/2左右，比传统的1/3高出了许多。 我们想探究清楚的问题有两个： reputation能对共识起到怎样的作用？ reputation在共识中是如何起作用的？即reputation的机制是怎样建立的？ Guru: Universal Reputation M">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/reputation-for-consensus/p1.jpg">
+<meta property="og:image" content="http://yoursite.com/reputation-for-consensus/p2.jpg">
+<meta property="og:updated_time" content="2018-10-21T14:03:42.819Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="reputation for consensus">
+<meta name="twitter:description" content="前言： 主要调研reputation能在consensus中起到的积极的作用。主要参考自Guru。Guru能让普通的bft算法的恶意节点达到1/2左右，比传统的1/3高出了许多。 我们想探究清楚的问题有两个： reputation能对共识起到怎样的作用？ reputation在共识中是如何起作用的？即reputation的机制是怎样建立的？ Guru: Universal Reputation M">
+<meta name="twitter:image" content="http://yoursite.com/reputation-for-consensus/p1.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/reputation-for-consensus/"/>
+
+
+
+
+
+  <title>reputation for consensus | Coolguyinhust</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Coolguyinhust</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">KaiXin</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/reputation-for-consensus/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="KaiXin Xiong">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/img/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coolguyinhust">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">reputation for consensus</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-19T16:06:24+08:00">
+                2018-10-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/blockchain/" itemprop="url" rel="index">
+                    <span itemprop="name">区块链</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>前言：</p>
+<p>主要调研reputation能在consensus中起到的积极的作用。主要参考自Guru。Guru能让普通的bft算法的恶意节点达到1/2左右，比传统的1/3高出了许多。</p>
+<p>我们想探究清楚的问题有两个：</p>
+<p>reputation能对共识起到怎样的作用？</p>
+<p>reputation在共识中是如何起作用的？即reputation的机制是怎样建立的？</p>
+<h1 id="Guru-Universal-Reputation-Module-for-Distributed-Consensus-Protocols"><a href="#Guru-Universal-Reputation-Module-for-Distributed-Consensus-Protocols" class="headerlink" title="Guru: Universal Reputation Module for Distributed Consensus Protocols"></a>Guru: Universal Reputation Module for Distributed Consensus Protocols</h1><h2 id="Reputation-module"><a href="#Reputation-module" class="headerlink" title="Reputation module"></a>Reputation module</h2><p>在建立reputation模型之前假定以下成立：</p>
+<ul>
+<li>存在任意轮的epoch。（比如每生成一个block叫一个epoch）</li>
+<li>N个nodes决定是否通过这笔tx</li>
+<li>不论是否达成共识，结果对所有节点可见</li>
+<li>N个nodes不用全部参加，只要m个nodes组成的Committee做出决定就行，这个decision不能伪造</li>
+<li>所有的认证信息都会被节点签名</li>
+</ul>
+<h3 id="external-and-final"><a href="#external-and-final" class="headerlink" title="external and final"></a>external and final</h3><p>用N表示set of Nodes ,R(x)表示reputation rate，P(x)是node x is malicious的概率。</p>
+<p>我们这样认为（reputation的值越高， 成为恶意节点的后验概率越低。）</p>
+<p>如果我们不考虑R(x)的初始分布，一开始可以令R（x）= 0</p>
+<p>我们可以假定成为恶意节点的先验概率都是a0(默认值)，信誉度最高时成为恶意节点的概率是a1.</p>
+<p>对R(x)进行归一化：<br>$$<br>R(x)=1-\frac{P(x)-a1}{a0-a1}<br>$$</p>
+<p>$$<br>P(x)=(a0-a1)(1-R(x))+a1<br>$$<br>但如果我们考虑R(x)的初始值的问题(external reputation)，即这个module最开始的先验概率.</p>
+<p>e.g. 假定R(x)最开始满足在区间[0,1]上，(0.5,0.15)的正态分布，a0=0.8,a1=0.15,R(x)最高的前10%中的恶意节点只有23%。（注意a0=0.8已经非常高了）</p>
+<img src="/reputation-for-consensus/p1.jpg">
+<h3 id="Committee-selection"><a href="#Committee-selection" class="headerlink" title="Committee selection"></a>Committee selection</h3><p>一个round中的decision是由committee决定的，committee达成共识，则这笔交易达成。</p>
+<p>下面介绍一下选择算法：</p>
+<ol>
+<li>以降序方式对节点的R值排序。</li>
+<li>基于某种分布D，选择m个随机数，取出对应的节点。</li>
+</ol>
+<p>比如D选择指数分布的话，R（x）低的话就会得到比较明显的抑制。D选择三角分布的话，就按照R按比例分，收敛比较慢。</p>
+<h3 id="Source-of-randomness"><a href="#Source-of-randomness" class="headerlink" title="Source of randomness"></a>Source of randomness</h3><p>随机数的选择决定了参与决定的commiittee成员，如果我们使用伪随机数生成器，敌方就能预测了。</p>
+<p>（下面随机数的生成过程还没有理解，大意是得到一个seed y）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">A protocol thus needs a random beacon [26] – the common randomness regularly</span><br><span class="line">coming from an external trusted source. For example, a system that relies on the security of the Bitcoin or Ethereum blockchain can take random values from the respective block hashes.</span><br><span class="line">We suggest instantiating an external beacon with a distributed key generation protocol,which assumes that there is never more than m/2 malicious nodes in the committee.At each round committee members produce randomness for the next round with the following properties:</span><br><span class="line">– Honest parties receive the same value y = g^x mod p for a large prime p and prefixed g.</span><br><span class="line">– Any m/2 + 1 honest parties can reconstruct x.</span><br><span class="line">– x and y are distributed uniformly in their respective spaces.</span><br><span class="line">The protocol by Gennaro et al. [10] is a perfect example, though alternatives are possible[11]. The committee nodes engage for 2-step message exchange, where they start with generating a secret value, and end with collectively producing the uniform output y, which serves as a random seed for the next round from a PRNG such as HKDF [14].</span><br><span class="line">This can be easily set for an arbitrary long output. Its outputs are taken as 128-bit strings b0,b1,..., which are treated as fixed-point values in [0, 1] as bi/2^128.</span><br></pre></td></tr></table></figure>
+<p>p它说是最大的质数，但到底怎么选？</p>
+<p>g是谁的前缀？x又是如何决定的？</p>
+<p>但我们假定已经得到无法预测的y了，手动狗头    orz</p>
+<h3 id="Rewards-and-penalties"><a href="#Rewards-and-penalties" class="headerlink" title="Rewards and penalties"></a>Rewards and penalties</h3><p>我们认定以下事实：</p>
+<ul>
+<li>恶意节点数量&lt;1/3（无影响）或 &gt;2/3（完全控制）</li>
+<li>当恶意节点的数量在1/3~2/3之间，则committee不会达到共识。</li>
+</ul>
+<p>我们建立以下模型：</p>
+<ul>
+<li>如果达成共识，广播SUCCESS.  C[r] ( 第r 轮节点中committee成员的集合)中每个的R值都增加；</li>
+<li>反之，广播FAILUERE;R减少；</li>
+</ul>
+<p>当然，存在恶意节点数&gt;2/3的情况，这时敌方已经接管系统了，就不用挣扎了…</p>
+<p>the reward function for node n:<br>$$<br>Rr(n)=R(n)+\frac{(1-s)(1-R(n)}{d}\qquad (d&gt;=1)<br>$$<br>the penalty function:<br>$$<br>Rp(n)=R(n)-\frac{s*R(n) }{d}\qquad (d&gt;=1)<br>$$<br>s是SUCCESS rounds in the last 100 rounds (if 56 were successful,then s = 0.56).</p>
+<p>d随着随机数的生成方式不同而不同；指数分布的话，一般取d=10,三角的话，一般取d=35;</p>
+<p>如果一轮没有达到共识的话，信誉高的节点会比信誉低的节点扣更多的R值；</p>
+<h3 id="Convergence"><a href="#Convergence" class="headerlink" title="Convergence"></a>Convergence</h3><img src="/reputation-for-consensus/p2.jpg">
+<hr>
+<p>consensus就是pbft,只是它选的节点有讲究。</p>
+<p>reputation感觉就是加权，比如它从没做过恶，它下次作恶的概率就低，我每次选加权高的，就能整体容纳更多的恶意节点.。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/paper/" rel="tag"># paper</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/fabric0/" rel="next" title="fabric架构分析">
+                <i class="fa fa-chevron-left"></i> fabric架构分析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/BFT-smart/" rel="prev" title="BFT_smart">
+                BFT_smart <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/img/avatar.jpg"
+                alt="KaiXin Xiong" />
+            
+              <p class="site-author-name" itemprop="name">KaiXin Xiong</p>
+              <p class="site-description motion-element" itemprop="description">know my way ,then do my wishes!</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/coolguyinhust" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="coolguyinhust6699@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/SoP_KaiXinHaHa/" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i>CSDN</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Guru-Universal-Reputation-Module-for-Distributed-Consensus-Protocols"><span class="nav-number">1.</span> <span class="nav-text">Guru: Universal Reputation Module for Distributed Consensus Protocols</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Reputation-module"><span class="nav-number">1.1.</span> <span class="nav-text">Reputation module</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#external-and-final"><span class="nav-number">1.1.1.</span> <span class="nav-text">external and final</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Committee-selection"><span class="nav-number">1.1.2.</span> <span class="nav-text">Committee selection</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Source-of-randomness"><span class="nav-number">1.1.3.</span> <span class="nav-text">Source of randomness</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Rewards-and-penalties"><span class="nav-number">1.1.4.</span> <span class="nav-text">Rewards and penalties</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Convergence"><span class="nav-number">1.1.5.</span> <span class="nav-text">Convergence</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">KaiXin Xiong</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+	<div class="powered-by">
+	<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+	  本站访客数: <span id="busuanzi_value_site_uv"></span>
+	</span>
+	</div>
+  <span class="post-meta-divider">  | </span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共31.1k字</span>
+</div>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+	
+		<script type="text/javascript"
+		color="0,0,255" opacity='0.7' zIndex="-2" count="99" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+	
+</body>
+</html>

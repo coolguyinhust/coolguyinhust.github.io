@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<script>
+    (function(){
+        if(''){
+            if (prompt('请输入文章密码') !== ''){
+                alert('密码错误');
+                history.back();
+            }
+        }
+    })();
+</script>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Java,并发编程," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="在Blockchain中经常遇到这样的情景，如使用pbft算法时，会有一个primary节点和其它很多backup节点通信，其中primary节点完成的是交易打包的工作；当并发量相当大的时候，client与节点之间，节点之间，很容易出现宕机的情况。 下面我们介绍消息队列的使用场景和分布式系统中的消息服务模式。 消息队列什么是消息队列？消息队列中间件是分布式系统中重要的组件，主要解决应用耦合（串行任">
+<meta name="keywords" content="Java,并发编程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="消息服务与message_queue">
+<meta property="og:url" content="http://yoursite.com/message-queue/index.html">
+<meta property="og:site_name" content="Coolguyinhust">
+<meta property="og:description" content="在Blockchain中经常遇到这样的情景，如使用pbft算法时，会有一个primary节点和其它很多backup节点通信，其中primary节点完成的是交易打包的工作；当并发量相当大的时候，client与节点之间，节点之间，很容易出现宕机的情况。 下面我们介绍消息队列的使用场景和分布式系统中的消息服务模式。 消息队列什么是消息队列？消息队列中间件是分布式系统中重要的组件，主要解决应用耦合（串行任">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/message-queue/p4.jpg">
+<meta property="og:image" content="http://yoursite.com/message-queue/p5.jpg">
+<meta property="og:image" content="http://yoursite.com/message-queue/p6.jpg">
+<meta property="og:image" content="http://yoursite.com/message-queue/p7.jpg">
+<meta property="og:image" content="http://yoursite.com/message-queue/p1.gif">
+<meta property="og:image" content="http://yoursite.com/message-queue/p1.gif">
+<meta property="og:image" content="http://yoursite.com/message-queue/p3.png">
+<meta property="og:updated_time" content="2018-11-12T12:51:01.351Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="消息服务与message_queue">
+<meta name="twitter:description" content="在Blockchain中经常遇到这样的情景，如使用pbft算法时，会有一个primary节点和其它很多backup节点通信，其中primary节点完成的是交易打包的工作；当并发量相当大的时候，client与节点之间，节点之间，很容易出现宕机的情况。 下面我们介绍消息队列的使用场景和分布式系统中的消息服务模式。 消息队列什么是消息队列？消息队列中间件是分布式系统中重要的组件，主要解决应用耦合（串行任">
+<meta name="twitter:image" content="http://yoursite.com/message-queue/p4.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/message-queue/"/>
+
+
+
+
+
+  <title>消息服务与message_queue | Coolguyinhust</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Coolguyinhust</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">KaiXin</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/message-queue/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="KaiXin Xiong">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/img/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coolguyinhust">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">消息服务与message_queue</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-21T12:45:29+08:00">
+                2018-10-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/编程思想/" itemprop="url" rel="index">
+                    <span itemprop="name">编程思想</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在Blockchain中经常遇到这样的情景，如使用pbft算法时，会有一个primary节点和其它很多backup节点通信，其中primary节点完成的是交易打包的工作；当并发量相当大的时候，client与节点之间，节点之间，很容易出现宕机的情况。</p>
+<p>下面我们介绍消息队列的使用场景和分布式系统中的消息服务模式。</p>
+<h1 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h1><h3 id="什么是消息队列？"><a href="#什么是消息队列？" class="headerlink" title="什么是消息队列？"></a>什么是消息队列？</h3><p>消息队列中间件是分布式系统中重要的组件，主要解决应用耦合（串行任务并行化）、异步消息（数据批量处理）、流量削锋（高负载的负载均衡）等问题。实现高性能、高可用、可伸缩和最终一致性架构。是大型分布式系统不可缺少的中间件。</p>
+<p>目前在生产环境，使用较多的消息队列有ActiveMQ、RabbitMQ、ZeroMQ、Kafka、MetaMQ、RocketMQ等。</p>
+<p>下面的解释很形象：</p>
+<p>不使用消息队列服务器：</p>
+<img src="/message-queue/p4.jpg">
+<p>使用消息队列服务器:</p>
+<img src="/message-queue/p5.jpg">
+<p>在使用消息队列后，用户请求的数据发送给消息队列后立即返回，再由消息队列的消费者进程（通常情况下，该进程通常独立部署在专门的服务器集群上）从消息队列中获取数据，异步写入数据库。由于消息队列服务器处理速度远快于数据库（消息队列服务器也比数据库具有更好的伸缩性），因此用户的响应延迟可得到有效改善。<br>消息队列具有很好的削峰作用——即通过异步处理，将短时间高并发产生的事务消息存储在消息队列中，从而削平高峰期的并发事务。在电子商务网站促销活动中，合理使用消息队列，可有效抵御促销活动刚开始大量涌入的订单对系统造成的冲击。</p>
+<p>需要注意的是，由于数据写入消息队列后立即返回给用户，数据在后续的业务校验、写数据库等操作可能失败，因此在使用消息队列进行业务异步处理后，需要适当修改业务流程进行配合，如订单提交后，订单数据写入消息队列，不能立即返回用户订单提交成功，需要在消息队列的订单消费者进程真正处理完该订单，甚至商品出库后，再通过电子邮件或SMS消息通知用户订单成功，以免交易纠纷。</p>
+<p>—选自《大型网站技术架构》</p>
+<h3 id="它能解决什么问题？"><a href="#它能解决什么问题？" class="headerlink" title="它能解决什么问题？"></a>它能解决什么问题？</h3><p>技术都是解决问题的，消息队列解决的是将突发大量请求转换为后端能承受的队列请求，比如你的服务器一秒能处理100个订单，但秒杀活动1秒进来1000个订单，持续10秒，在后端能力无法增加的情况下，你可以用消息队列将总共10000个请求压在队列里，后台consumer按原有能力处理，100秒后处理完所有请求（而不是直接宕机丢失订单数据）</p>
+<h3 id="它是如何实现的？"><a href="#它是如何实现的？" class="headerlink" title="它是如何实现的？"></a>它是如何实现的？</h3><p>可以使用SpringBoot + RabbitMQ</p>
+<img src="/message-queue/p6.jpg">
+<img src="/message-queue/p7.jpg">
+<p>import org.springframework.amqp.rabbit.core.RabbitTemplate</p>
+<p>先写一个配置类，比如定义3个交换机，定义3个队列，定义3种绑定关系；</p>
+<p>写生产者类Producer</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Myproducer</span></span>&#123;</span><br><span class="line">	<span class="meta">@Autowired</span></span><br><span class="line">	AmqpTemplate amqpTemplate;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">send</span><span class="params">()</span></span>&#123;</span><br><span class="line">        amqpTemplate.convertAndSend(<span class="string">"DIRECT_EXCHANGE"</span>,<span class="string">"hust.best"</span>,<span class="string">"a direct msg"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>再写消费者Consumer类：从三个队列中取走消息</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@RabbitListener</span>(queue=<span class="string">"FIRST_QUEUE"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FirstConsumer</span></span>&#123;</span><br><span class="line">    <span class="meta">@RabbitHandler</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">process</span><span class="params">(String msg)</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"first queue received"</span>+msg);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@RabbitListener</span>(queue=<span class="string">"SECOND_QUEUE"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SECONDConsumer</span></span>&#123;</span><br><span class="line">    <span class="meta">@RabbitHandler</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">process</span><span class="params">(String msg)</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"second queue received"</span>msg);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@RabbitListener</span>(queue=<span class="string">"Third_QUEUE"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThirdConsumer</span></span>&#123;</span><br><span class="line">    <span class="meta">@RabbitHandler</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">process</span><span class="params">(String msg)</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"third queue received"</span>msg);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>怎么避免重复消费？</p>
+<p>流水号——重账控制</p>
+<p>消息幂等——–version</p>
+<h1 id="消息服务-in-Java（JMS）"><a href="#消息服务-in-Java（JMS）" class="headerlink" title="消息服务 in Java（JMS）"></a>消息服务 in Java（JMS）</h1><blockquote>
+<p>Java消息服务指的是两个应用程序之间进行异步通信的API，它为标准消息协议和消息服务提供了一组通用接口，包括创建、发送、读取消息等，用于支持JAVA应用程序开发。在J2EE中，当两个应用程序使用JMS进行通信时，它们之间并不是直接相连的，而是通过一个共同的消息收发服务连接起来，可以达到解耦的效果。</p>
+</blockquote>
+<p>JMS的编程过程很简单，概括为：<strong>应用程序A发送一条消息到消息服务器的某个目得地(Destination)，然后消息服务器把消息转发给应用程序B。</strong></p>
+<h2 id="消息传送模型"><a href="#消息传送模型" class="headerlink" title="消息传送模型"></a>消息传送模型</h2><h3 id="点对点消息传送模型PTP"><a href="#点对点消息传送模型PTP" class="headerlink" title="点对点消息传送模型PTP"></a>点对点消息传送模型PTP</h3><p><strong>一条消息只能传递给一个接收方</strong>。 采用<strong>javax.jms.Queue</strong> 表示。</p>
+<p>在点对点消息传送模型中，应用程序由 <strong>消息队列</strong>，发送者，接收者组成。每一个消息发送给一个特殊的消息队列，该队列保存了所有发送给它的消息(除了被接收者消费掉的和过期的消息)。点对点消息模型有一些特性，如下：</p>
+<ul>
+<li>每个消息只有一个接收者；</li>
+<li>消息发送者和接收者并没有时间依赖性；</li>
+<li>当消息发送者发送消息的时候，无论接收者程序在不在运行，都能获取到消息；</li>
+<li>当接收者收到消息的时候，会发送确认收到通知（acknowledgement）。</li>
+</ul>
+<img src="/message-queue/p1.gif">
+<h3 id="发布-订阅消息传递模型Pub-sub"><a href="#发布-订阅消息传递模型Pub-sub" class="headerlink" title="发布/订阅消息传递模型Pub/sub"></a>发布/订阅消息传递模型Pub/sub</h3><p><strong>允许一条消息传递给多个接收方</strong>。采用<strong>javax.jms.Topic</strong>表示</p>
+<p>在发布/订阅消息模型中，发布者发布一个消息，该消息通过topic传递给所有的客户端。在这种模型中，发布者和订阅者彼此不知道对方，是匿名的且可以动态发布和订阅topic。topic主要用于保存和传递消息，且会一直保存消息直到消息被传递给客户端。</p>
+<p>发布/订阅消息模型特性如下：</p>
+<ul>
+<li><p>一个消息可以传递给多个订阅者</p>
+</li>
+<li><p>发布者和订阅者有时间依赖性，只有当客户端创建订阅后才能接受消息，且订阅者需一直保持活动状态以接收消息。</p>
+</li>
+<li><p>为了缓和这样严格的时间相关性，JMS允许订阅者创建一个可持久化的订阅。这样，即使订阅者没有被激活（运行），它也能接收到发布者的消息。</p>
+<img src="/message-queue/p1.gif">
+</li>
+</ul>
+<h2 id="JMS编程接口"><a href="#JMS编程接口" class="headerlink" title="JMS编程接口"></a>JMS编程接口</h2><p>　　JMS应用程序由如下基本模块组成：</p>
+<ol>
+<li>管理对象（Administered objects）-连接工厂（Connection Factories）和目的地（Destination）</li>
+<li>连接对象（Connections）</li>
+<li>会话（Sessions）</li>
+<li>消息生产者（Message Producers）</li>
+<li>消息消费者（Message Consumers）</li>
+<li>消息监听者（Message Listeners）</li>
+</ol>
+<img src="/message-queue/p3.png">
+<h2 id="JMS管理对象"><a href="#JMS管理对象" class="headerlink" title="JMS管理对象"></a>JMS管理对象</h2><p>管理对象（Administered objects）是预先配置的JMS对象，由系统管理员为使用JMS的客户端创建，主要有两个被管理的对象：</p>
+<ul>
+<li>连接工厂（ConnectionFactory）</li>
+<li>目的地（Destination）</li>
+</ul>
+<p>这两个管理对象由JMS系统管理员通过使用Application Server管理控制台创建，存储在应用程序服务器的JNDI名字空间或JNDI注册表。</p>
+<h2 id="连接工厂（ConnectionFactory）"><a href="#连接工厂（ConnectionFactory）" class="headerlink" title="连接工厂（ConnectionFactory）"></a>连接工厂（ConnectionFactory）</h2><p>客户端使用一个连接工厂对象连接到JMS服务提供者，它创建了JMS服务提供者和客户端之间的连接。JMS客户端（如发送者或接受者）会在JNDI名字空间中搜索并获取该连接。使用该连接，客户端能够与目的地通讯，往队列或话题发送/接收消息。让我们用一个例子来理解如何发送消息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">QueueConnectionFactory queueConnFactory = (QueueConnectionFactory) initialCtx.lookup (&quot;primaryQCF&quot;);</span><br><span class="line">Queue purchaseQueue = (Queue) initialCtx.lookup (&quot;Purchase_Queue&quot;);</span><br><span class="line">Queue returnQueue = (Queue) initialCtx.lookup (&quot;Return_Queue&quot;);</span><br></pre></td></tr></table></figure>
+<h2 id="目的地（Destination）"><a href="#目的地（Destination）" class="headerlink" title="目的地（Destination）"></a>目的地（Destination）</h2><p>目的地指明消息被发送的目的地以及客户端接收消息的来源。JMS使用两种目的地，队列和话题。如下代码指定了一个队列和话题。</p>
+<p><strong>创建一个队列Session</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">QueueSession ses = con.createQueueSession (false, Session.AUTO_ACKNOWLEDGE);  //get the Queue object  </span><br><span class="line">Queue t = (Queue) ctx.lookup (&quot;myQueue&quot;);  //create QueueReceiver  </span><br><span class="line">QueueReceiver receiver = ses.createReceiver(t);</span><br></pre></td></tr></table></figure>
+<p><strong>创建一个话题Session</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">TopicSession ses = con.createTopicSession (false, Session.AUTO_ACKNOWLEDGE); // get the Topic object  </span><br><span class="line">Topic t = (Topic) ctx.lookup (&quot;myTopic&quot;);  //create TopicSubscriber  </span><br><span class="line">TopicSubscriber receiver = ses.createSubscriber(t);</span><br></pre></td></tr></table></figure>
+<h2 id="JMS连接"><a href="#JMS连接" class="headerlink" title="JMS连接"></a>JMS连接</h2><p>连接对象封装了与JMS提供者之间的虚拟连接，如果我们有一个ConnectionFactory对象，可以使用它来创建一个连接。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Connection connection = connectionFactory.createConnection();</span><br></pre></td></tr></table></figure>
+<p>创建完连接后，需要在程序使用结束后关闭它：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">connection.close();</span><br></pre></td></tr></table></figure>
+<h2 id="JMS-会话（Session）"><a href="#JMS-会话（Session）" class="headerlink" title="JMS 会话（Session）"></a>JMS 会话（Session）</h2><p>Session是一个单线程上下文，用于生产和消费消息，可以创建出消息生产者和消息消费者。</p>
+<p>Session对象实现了Session接口，在创建完连接后，我们可以使用它创建Session。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);</span><br></pre></td></tr></table></figure>
+<h2 id="JMS消息生产者"><a href="#JMS消息生产者" class="headerlink" title="JMS消息生产者"></a>JMS消息生产者</h2><p>消息生产者由Session创建，用于往目的地发送消息。生产者实现MessageProducer接口，我们可以为目的地、队列或话题创建生产者；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">MessageProducer producer = session.createProducer(dest);</span><br><span class="line">MessageProducer producer = session.createProducer(queue);</span><br><span class="line">MessageProducer producer = session.createProducer(topic);</span><br></pre></td></tr></table></figure>
+<p>创建完消息生产者后，可以使用send方法发送消息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">producer.send(message);</span><br></pre></td></tr></table></figure>
+<h2 id="JMS消息消费者"><a href="#JMS消息消费者" class="headerlink" title="JMS消息消费者"></a>JMS消息消费者</h2><p>消息消费者由Session创建，用于接受目的地发送的消息。消费者实现MessageConsumer接口，，我们可以为目的地、队列或话题创建消费者；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">MessageConsumer consumer = session.createConsumer(dest);</span><br><span class="line">MessageConsumer consumer = session.createConsumer(queue);</span><br><span class="line">MessageConsumer consumer = session.createConsumer(topic);</span><br></pre></td></tr></table></figure>
+<h2 id="JMS消息监听器"><a href="#JMS消息监听器" class="headerlink" title="JMS消息监听器"></a>JMS消息监听器</h2><p>JMS消息监听器是消息的默认事件处理者，他实现了MessageListener接口，该接口包含一个onMessage方法，在该方法中需要定义消息达到后的具体动作。通过调用setMessageListener方法我们给指定消费者定义了消息监听器</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Listener myListener = new Listener();</span><br><span class="line">consumer.setMessageListener(myListener);</span><br></pre></td></tr></table></figure>
+<p>参考博客：</p>
+<p><a href="https://my.oschina.net/zhanghaiyang/blog/593274" target="_blank" rel="noopener">https://my.oschina.net/zhanghaiyang/blog/593274</a></p>
+<p><a href="https://www.cnblogs.com/chenpi/p/5559349.html" target="_blank" rel="noopener">https://www.cnblogs.com/chenpi/p/5559349.html</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/并发编程/" rel="tag"># 并发编程</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/BFT-smart/" rel="next" title="BFT_smart">
+                <i class="fa fa-chevron-left"></i> BFT_smart
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/distributed-system/" rel="prev" title="distributed system">
+                distributed system <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/img/avatar.jpg"
+                alt="KaiXin Xiong" />
+            
+              <p class="site-author-name" itemprop="name">KaiXin Xiong</p>
+              <p class="site-description motion-element" itemprop="description">know my way ,then do my wishes!</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/coolguyinhust" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="coolguyinhust6699@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/SoP_KaiXinHaHa/" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i>CSDN</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#消息队列"><span class="nav-number">1.</span> <span class="nav-text">消息队列</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是消息队列？"><span class="nav-number">1.0.1.</span> <span class="nav-text">什么是消息队列？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#它能解决什么问题？"><span class="nav-number">1.0.2.</span> <span class="nav-text">它能解决什么问题？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#它是如何实现的？"><span class="nav-number">1.0.3.</span> <span class="nav-text">它是如何实现的？</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#消息服务-in-Java（JMS）"><span class="nav-number">2.</span> <span class="nav-text">消息服务 in Java（JMS）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#消息传送模型"><span class="nav-number">2.1.</span> <span class="nav-text">消息传送模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#点对点消息传送模型PTP"><span class="nav-number">2.1.1.</span> <span class="nav-text">点对点消息传送模型PTP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#发布-订阅消息传递模型Pub-sub"><span class="nav-number">2.1.2.</span> <span class="nav-text">发布/订阅消息传递模型Pub/sub</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JMS编程接口"><span class="nav-number">2.2.</span> <span class="nav-text">JMS编程接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JMS管理对象"><span class="nav-number">2.3.</span> <span class="nav-text">JMS管理对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#连接工厂（ConnectionFactory）"><span class="nav-number">2.4.</span> <span class="nav-text">连接工厂（ConnectionFactory）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#目的地（Destination）"><span class="nav-number">2.5.</span> <span class="nav-text">目的地（Destination）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JMS连接"><span class="nav-number">2.6.</span> <span class="nav-text">JMS连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JMS-会话（Session）"><span class="nav-number">2.7.</span> <span class="nav-text">JMS 会话（Session）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JMS消息生产者"><span class="nav-number">2.8.</span> <span class="nav-text">JMS消息生产者</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JMS消息消费者"><span class="nav-number">2.9.</span> <span class="nav-text">JMS消息消费者</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JMS消息监听器"><span class="nav-number">2.10.</span> <span class="nav-text">JMS消息监听器</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">KaiXin Xiong</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+	<div class="powered-by">
+	<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+	  本站访客数: <span id="busuanzi_value_site_uv"></span>
+	</span>
+	</div>
+  <span class="post-meta-divider">  | </span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共31.1k字</span>
+</div>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+	
+		<script type="text/javascript"
+		color="0,0,255" opacity='0.7' zIndex="-2" count="99" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+	
+</body>
+</html>

@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<script>
+    (function(){
+        if(''){
+            if (prompt('请输入文章密码') !== ''){
+                alert('密码错误');
+                history.back();
+            }
+        }
+    })();
+</script>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="paper," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="系统设计更偏向于艺术而不是科学！了解设计理念往往比系统本身更重要   分布式基础入门： http://book.mixu.net/distsys/  基础概念：  评价一个分布式系统的性能指标 系统模型 两个不可能定理和一致性模型 分区和复制 时间与顺序 复制与一致性模型  性能指标①性能：所用时间和资源越少，完成的工作越多，性能越高。 Performance (and latency) is">
+<meta name="keywords" content="paper">
+<meta property="og:type" content="article">
+<meta property="og:title" content="distributed system">
+<meta property="og:url" content="http://yoursite.com/distributed-system/index.html">
+<meta property="og:site_name" content="Coolguyinhust">
+<meta property="og:description" content="系统设计更偏向于艺术而不是科学！了解设计理念往往比系统本身更重要   分布式基础入门： http://book.mixu.net/distsys/  基础概念：  评价一个分布式系统的性能指标 系统模型 两个不可能定理和一致性模型 分区和复制 时间与顺序 复制与一致性模型  性能指标①性能：所用时间和资源越少，完成的工作越多，性能越高。 Performance (and latency) is">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/distributed-system/p1.png">
+<meta property="og:image" content="http://yoursite.com/distributed-system/p2.png">
+<meta property="og:updated_time" content="2018-11-04T01:51:35.275Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="distributed system">
+<meta name="twitter:description" content="系统设计更偏向于艺术而不是科学！了解设计理念往往比系统本身更重要   分布式基础入门： http://book.mixu.net/distsys/  基础概念：  评价一个分布式系统的性能指标 系统模型 两个不可能定理和一致性模型 分区和复制 时间与顺序 复制与一致性模型  性能指标①性能：所用时间和资源越少，完成的工作越多，性能越高。 Performance (and latency) is">
+<meta name="twitter:image" content="http://yoursite.com/distributed-system/p1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/distributed-system/"/>
+
+
+
+
+
+  <title>distributed system | Coolguyinhust</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Coolguyinhust</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">KaiXin</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/distributed-system/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="KaiXin Xiong">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/img/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coolguyinhust">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">distributed system</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-28T15:25:54+08:00">
+                2018-10-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/分布式/" itemprop="url" rel="index">
+                    <span itemprop="name">分布式</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>系统设计更偏向于艺术而不是科学！了解设计理念往往比系统本身更重要</p>
+</blockquote>
+<hr>
+<p>分布式基础入门：</p>
+<p><a href="http://book.mixu.net/distsys/" target="_blank" rel="noopener">http://book.mixu.net/distsys/</a> </p>
+<p>基础概念：</p>
+<ul>
+<li>评价一个分布式系统的性能指标</li>
+<li>系统模型</li>
+<li>两个不可能定理和一致性模型</li>
+<li>分区和复制</li>
+<li>时间与顺序</li>
+<li>复制与一致性模型</li>
+</ul>
+<h4 id="性能指标"><a href="#性能指标" class="headerlink" title="性能指标"></a>性能指标</h4><p>①性能：所用时间和资源越少，完成的工作越多，性能越高。</p>
+<p>Performance (and latency) is characterized by the amount of useful work accomplished by a computer system compared to the time and resources used.</p>
+<p>关于延时，意味着发生到生效的时间间隔。信息最快以光速传播，以及硬件处理操作产生的延时属于无法克服的最小时延。</p>
+<p>Latency:  The state of being latent; delay, a period between the initiation of something and the occurrence.</p>
+<p>②可扩展性：</p>
+<ul>
+<li>大小可扩展性：添加更多节点应该使系统线性更快; 增长数据集<strong>不应该增加延迟</strong></li>
+<li>地理可扩展性：应该可以使用多个数据中心来减少响应用户查询所需的时间，同时以一种合理的方式处理跨数据中心延迟。</li>
+<li>管理可扩展性：添加更多节点<strong>不应增加系统的管理成本</strong>（例如管理员与机器的比率）。</li>
+</ul>
+<p>Scalability is the ability of a system, network, or process, to handle a growing amount of work in a capable manner or its ability to be enlarged to accommodate that growth.</p>
+<p>③ 可用性和容错性：Availability (and fault tolerance)</p>
+<p>Availability is the proportion of time a system is in a functioning condition. If a user cannot access the system, it is said to be unavailable. 系统处于运行状态的时间比例。</p>
+<p>Fault tolerance is ability of a system to behave in a well-defined manner once faults occur.</p>
+<p>一旦发生故障，系统能够以你之前明确定义过的算法方式运行。如果你没有意料到这种错误，就无法容错。</p>
+<h4 id="系统模型（System-model）："><a href="#系统模型（System-model）：" class="headerlink" title="系统模型（System model）："></a>系统模型（System model）：</h4><p>a set of assumptions about the environment and facilities on which a distributed system is implemented.</p>
+<p>对特定系统设计相关的许多假设。<strong>强大</strong>的系统模型是做出<strong>最弱</strong>假设的模型，它只做很少和非常弱的假设，说明容错性好。这些假设主要是关于节点、链路、时间与顺序的。节点的故障假设：一种是<strong>崩溃恢复故障模型</strong>：即，节点只能通过崩溃而失败，并且可能（可能）在稍后崩溃后恢复；另一种是假设节点可能以任意方式行为不端而失败。这被称为<strong>拜占庭容错</strong>。网络链路的假设一是关于消息是否会丢失，假设网络是可靠的，即，消息永远不会丢失，永远不会无限延迟；二是链路出现故障，网络分区。时间假设一般是同步系统模型还是异步系统模型，异步系统模型没有时间假设 - 例如，流程以独立的速率执行; 消息传输延迟没有限制; 有用的时钟不存在；同步则假设了顺序到达和全局时钟。</p>
+<h4 id="两个不可能定理"><a href="#两个不可能定理" class="headerlink" title="两个不可能定理"></a>两个不可能定理</h4><p><strong>FLP impossibility result</strong>：在出现故障的异步系统中，对于共识问题不存在（确定性）算法</p>
+<p>examines the consensus problem under the asynchronous system model (technically, the agreement problem, which is a very weak form of the consensus problem) It is assumed that nodes can only fail by crashing; that the network is reliable, and that the typical timing assumptions of the asynchronous system model hold: e.g. there are no bounds on message delay.</p>
+<p>“<strong>there does not exist a (deterministic) algorithm for the consensus problem in an asynchronous system subject to failures</strong>, even if messages can never be lost, at most one process may fail, and it can only fail by crashing (stopping executing)”</p>
+<p>为了介绍CAP理论，我们先</p>
+<h4 id="Consistency-model"><a href="#Consistency-model" class="headerlink" title="Consistency model :"></a>Consistency model :</h4><p>a contract between programmer and system, wherein the system guarantees that if the programmer follows some specific rules, the results of operations on the data store will be predictable</p>
+<p><strong>The CAP theorem</strong>：(原文中A的定义不太好，这是在评论区的建议)</p>
+<p>参考博客：   <a href="https://www.jianshu.com/p/6169ba76429e" target="_blank" rel="noopener">https://www.jianshu.com/p/6169ba76429e</a></p>
+<ul>
+<li><p>Consistency: all nodes see the same data at the same time.指<strong>强一致性</strong>。</p>
+<p>强一致性：系统中的某个数据被成功更新后，后续任何对该数据的读取操作都将得到更新后的值；</p>
+<p>弱一致性：系统中的某个数据被更新后，后续对该数据的读取操作可能得到更新后的值，也可能是更改前的值。但经过“不一致时间窗口”这段时间后，后续对该数据的读取都是更新后的值；</p>
+<p>最终一致性：是弱一致性的特殊形式，存储系统保证在没有新的更新的条件下，最终所有的访问都是最后更新的值。</p>
+</li>
+<li><p>Availability：Reads and writes always succeed,  a guarantee that every request receives a response about whether it succeeded or failed</p>
+<p>服务一直可用，每一个非故障的节点必须对每一个请求作出响应。</p>
+</li>
+<li><p>Partition tolerance: the system continues to operate despite message loss due to network and/or node failure.即分布式系统在遇到某节点或网络分区故障的时候，仍然能够对外提供满足一致性和可用性的服务。</p>
+</li>
+</ul>
+<p>only two can be satisfied simultaneously. </p>
+<img src="/distributed-system/p1.png">
+<p>传统是分布式系统一般不考虑分区容忍性，但<strong>现在一般要考虑分区容错</strong>；</p>
+<p>假设发生了分区，该定理会简化为A和C之间的二元选择。A和C的选择类似于多线程编程中，服务器看成线程，如果对一块数据多次写入（不加锁），不同的线程读取的值就不一样（一致性就得不到满足）；如果加了锁，可以满足一致性，但一次只能保证一台服务器写数据，其它服务器写请求会被拒绝，可用性得不到满足。具体选什么看情况：</p>
+<p>对于涉及到钱财这样不能有一丝让步的场景，C必须保证。网络发生故障宁可停止服务，这是保证CA，舍弃P。貌似这几年国内银行业发生了不下10起事故，但影响面不大，报到也不多，广大群众知道的少。还有一种是保证CP，舍弃A。例如网络故障事只读不写。</p>
+<p>对于多数大型互联网应用的场景，主机众多、部署分散，而且现在的集群规模越来越大，所以节点故障、网络故障是常态，而且要保证服务可用性达到N个9，即保证P和A，舍弃C（退而求其次保证最终一致性）。虽然某些地方会影响客户体验，但没达到造成用户流程的严重程度。</p>
+<h4 id="分区和复制"><a href="#分区和复制" class="headerlink" title="分区和复制"></a>分区和复制</h4><p>分区和复制从我个人的理解角度是数据的分配方式；分区是应用于特定程序的，因为每个分区都是数据的子集，可能用来并行处理.. 复制的应用则很广，通过提供额外的计算能力提高性能，处理单点故障，提高可用性，提高吞吐量。但复制也是许多问题的根源，<em>必须在多台机器上保持同步的数据的独立副本 - 这意味着确保复制遵循一致性模型。</em></p>
+<h4 id="时间与顺序"><a href="#时间与顺序" class="headerlink" title="时间与顺序"></a>时间与顺序</h4><p>local clock、global clock（一般指UTC）、logical clock</p>
+<p><strong>每台机器都有自己的local clock，对于local clock而言，“you cannot meaningfully compare timestamps from two different machines.”</strong></p>
+<p>分布式系统的clock不是同步的，本地时间戳不会与全局时间保持一致！存在误差！</p>
+<p>例如对于火箭发射这种科研活动，对时间的统一性和准确性要求就非常地高，是按照A这台计算机的时间，还是按照B这台计算机的时间？NTP就是用来解决这个问题的。</p>
+<p><strong>NTP</strong>（Network Time Protocol，<strong>网络时间协议</strong>）是用来使网络中的各个计算机时间同步的一种协议。它的用途是把计算机的时钟同步到世界协调时UTC，其精度在局域网内可达0.1ms，在互联网上绝大多数的地方其精度可以达到1-50ms。</p>
+<p>介绍一下逻辑时钟（最有名的是矢量时钟）</p>
+<p>类似git version的用法，A、B同时对一段代码写操作，逻辑时钟主要用来获得最新的版本；</p>
+<p>解释见：<a href="https://www.quora.com/What-is-a-vector-clock" target="_blank" rel="noopener">https://www.quora.com/What-is-a-vector-clock</a></p>
+<p>​           <a href="https://www.quora.com/What-is-logical-time-in-a-distributed-system" target="_blank" rel="noopener">https://www.quora.com/What-is-logical-time-in-a-distributed-system</a></p>
+<p>它的思想是在异步网络下对event发生的先后顺序做出排序；由于没有精确的同步时钟，所以自然的想到用counter来计数；每台服务器对事件的进程都开启一组类似dict的数据结构（serverA：0；server B：0；server C:0）;每当一台服务器发出一条消息，自己加一；接收一条消息，其它服务器最大同步，自己则最大加一。（最大是指本地的值与接收到的值取大的）</p>
+<img src="/distributed-system/p2.png">
+<p>纯粹的Vector Clock没有意义，和物理时钟之间的误差无穷大，解决不了快照读。为了解决这个问题，Logical Physical Clocks and Consistent Snapshots in Globally Distributed Databases 这篇文章将逻辑时钟和物理时钟结合起来，将误差控制在NTP误差内。</p>
+<p>（from <a href="https://www.zhihu.com/question/19994133/answer/72360435）" target="_blank" rel="noopener">https://www.zhihu.com/question/19994133/answer/72360435）</a></p>
+<h4 id="复制与一致性模型"><a href="#复制与一致性模型" class="headerlink" title="复制与一致性模型"></a>复制与一致性模型</h4><p>这一部分主要介绍了同步复制和异步复制；同步就是客户端阻塞来获得N-of-N的响应，保证了durability(耐用性)；异步复制是非阻塞型的，意味着客户端得到reply会非常快，但是不提供一致性保证。</p>
+<p>然后，作者对major replication algorithms进行了划分；</p>
+<p>分成了防止分区的single copy systems以及risk divergency(multi-master systems);</p>
+<p><strong>single copy systems</strong>像单个系统那样运行，所以需要解决共识问题，解决分布式的一致性问题的算法：比较著名的有<strong>二阶提交协议</strong>（Two Phase Commitment Protocol）、<strong>三阶提交协议</strong>（Three Phase Commitment Protocol）和<strong>Paxos算法</strong>（最著名的Partition tolerant consensus algorithm）。</p>
+<p>注：以上的算法都未考虑拜占庭容错。Paxos算法强调在网络分区或节点异常时，是因为如果不考虑这种异常状况，一致性是非常容易保证的，单节点即可。而一致性协议所要做的就是在容忍异常的情况下保证一致。这里的一致是对集群外部使用者而言的，将整个集群看做一个整体</p>
+<p>关于CA (consistency + availability)的2PC、3PC的详细介绍见：<a href="http://www.hollischuang.com/archives/1580" target="_blank" rel="noopener">http://www.hollischuang.com/archives/1580</a></p>
+<p>关于CP (consistency + partition tolerance)的paxos、raft，基本就是三个过程leader election，log replication和commit。为了容忍分区，只要做majority decisions.超过半数的节点认同，系统就可以继续运作。</p>
+<p><strong>multi-master systems</strong>和single copy systems完全不同，它不让系统像单台主机那样做total order,为了提升availability,必须放弃强一致性，允许在一段时间内diverge，但最终达到一样的值。</p>
+<blockquote>
+<p>Eventual consistency expresses this idea: that nodes can for some time diverge from each other, but that eventually they will agree on the value. </p>
+</blockquote>
+<p>关于多分区如何收敛到同样的结果的，以亚马逊的<strong>Dynamo</strong>为例:</p>
+<ul>
+<li>consistent hashing to determine key placement</li>
+<li>partial quorums for reading and writing</li>
+<li>conflict detection and read repair via vector clocks </li>
+<li>gossip for replica synchronization</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">第一步我们需要在系统中定位数据，客户端使用key-value的方式；</span><br><span class="line"></span><br><span class="line">the main idea is that a key can be mapped to a set of nodes responsible for it by a simple calculation on the client. This means that a client can locate keys without having to query the system for the location of each key;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">采用了部分quorums机制（一种容错技术）,这个技术不是新东西，而依据的数学理论就更早了，鸽笼原理，相关的论文好像是1979年发表的</span><br><span class="line"></span><br><span class="line">鸽笼原理很简单：若有n+1只鸽子关在n个笼子里，那么至少有一个笼子有至少2只鸽子</span><br><span class="line"></span><br><span class="line">这么简单的理论就能保证你想要的时候肯定可以拿到数据。</span><br><span class="line"></span><br><span class="line">鸽笼原理在这里的具体应用其实就是读副本数+写副本要大于总副本数</span><br><span class="line">W+R&gt;N 一般的，W+R=N+1   W是完成一次写操作最少要写入的节点数量；R是完成一次读操作最少要读取的数量；</span><br><span class="line"></span><br><span class="line">假设系统中有5个副本，W=3，R=3。初始时数据为(V1，V1，V1，V1，V1）--成功提交的版本号为1</span><br><span class="line">当某次更新操作在3个副本上成功后，就认为此次更新操作成功。数据变成：(V2，V2，V2，V1，V1）--成功提交后，版本号变成2</span><br><span class="line">因此，最多只需要读3个副本，一定能够读到V2(此次更新成功的数据)。而在后台，可对剩余的V1 同步到V2，而不需要让Client知道。</span><br><span class="line"></span><br><span class="line">分布式系统通常支持多副本，副本存放在不同节点上，读写时需要对多个副本进行操作。按照自然而然的想法，一个写操作会需要写多个副本，但是读只要读到一个副本即可。这种思路猛听起来很合理，有一个学名叫“读一写全协议”（read only write all,ROWA）但若真依此实现，每一次写都必须刷新所有副本，才能避免产生一致性问题，如此写操作就显得太“重”了，尤其是和读操作相比较，一头轻一头重，负载明显不平衡，更加显得不协调。而且写的respond time变长其实也会间接影响到读，因为不写好没法读嘛，最终拖慢整体性能。</span><br><span class="line"></span><br><span class="line">在实际的系统中，通常Quorum指的就是一次有效读或写操作所需要完成的有效副本数。</span><br><span class="line"></span><br><span class="line">采用Quorum机制后，写操作需要即刻完成的副本数减少，读操作需要成功读取的副本数增加，负载被间接转移了过去，一定程度上平衡了读写两种操作，系统整体性能会得到提升。</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Systems that allow replicas to diverge must have a way to eventually reconcile two different values. </span><br><span class="line">one way to do this is to detect conflicts at read time, and then apply some conflict resolution method.</span><br><span class="line"></span><br><span class="line">因为系统允许在期间分叉，那么为了最终达到一致，在读取时必须要有检测冲突，可以用矢量时钟恢复解决冲突；</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Given that the Dynamo system design is tolerant of node failures and network partitions, it needs a way to deal with nodes rejoining the cluster after being partitioned, or when a failed node is replaced or partially recovered.</span><br><span class="line"></span><br><span class="line">Every t seconds, each node picks a node to communicate with. This provides an additional mechanism beyond the synchronous task (e.g. the partial quorum writes) which brings the replicas up to date.</span><br><span class="line"></span><br><span class="line">In order to make the information exchange during replica synchronization efficient, Dynamo uses a technique called Merkle trees</span><br></pre></td></tr></table></figure>
+<p><em>书中最后介绍的另外一种场景，关于CRDTs（ Consistency Without Concurrency Control）和CALM（confluence analysis and Bloom）定理尚未理解。。</em></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/paper/" rel="tag"># paper</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/message-queue/" rel="next" title="消息服务与message_queue">
+                <i class="fa fa-chevron-left"></i> 消息服务与message_queue
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/com-net/" rel="prev" title="计算机网络复习(一)">
+                计算机网络复习(一) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/img/avatar.jpg"
+                alt="KaiXin Xiong" />
+            
+              <p class="site-author-name" itemprop="name">KaiXin Xiong</p>
+              <p class="site-description motion-element" itemprop="description">know my way ,then do my wishes!</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/coolguyinhust" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="coolguyinhust6699@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/SoP_KaiXinHaHa/" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i>CSDN</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#性能指标"><span class="nav-number">1.</span> <span class="nav-text">性能指标</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#系统模型（System-model）："><span class="nav-number">2.</span> <span class="nav-text">系统模型（System model）：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#两个不可能定理"><span class="nav-number">3.</span> <span class="nav-text">两个不可能定理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Consistency-model"><span class="nav-number">4.</span> <span class="nav-text">Consistency model :</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分区和复制"><span class="nav-number">5.</span> <span class="nav-text">分区和复制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#时间与顺序"><span class="nav-number">6.</span> <span class="nav-text">时间与顺序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#复制与一致性模型"><span class="nav-number">7.</span> <span class="nav-text">复制与一致性模型</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">KaiXin Xiong</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+	<div class="powered-by">
+	<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+	  本站访客数: <span id="busuanzi_value_site_uv"></span>
+	</span>
+	</div>
+  <span class="post-meta-divider">  | </span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共31.1k字</span>
+</div>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+	
+		<script type="text/javascript"
+		color="0,0,255" opacity='0.7' zIndex="-2" count="99" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+	
+</body>
+</html>

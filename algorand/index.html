@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<script>
+    (function(){
+        if(''){
+            if (prompt('请输入文章密码') !== ''){
+                alert('密码错误');
+                history.back();
+            }
+        }
+    })();
+</script>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="区块链," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="​    现在区块链饱受诟病并一直不被大众接收，除了难以理解之外，其自身原因大抵是因为各种共识算法存在的弊端，POW耗财耗电，POS又有悖于完全去中心化的初衷，易被“大鳄”控制，小散的积极性不高； algorand是一种新的方案，它类似于当前新股申购的中签方式（抽签），让人人都有机会发布区块链；当然它解决了很多其它问题，比如怎样防止adversary的攻击… algorand的最终目的就是尽可能做">
+<meta name="keywords" content="区块链">
+<meta property="og:type" content="article">
+<meta property="og:title" content="algorand">
+<meta property="og:url" content="http://yoursite.com/algorand/index.html">
+<meta property="og:site_name" content="Coolguyinhust">
+<meta property="og:description" content="​    现在区块链饱受诟病并一直不被大众接收，除了难以理解之外，其自身原因大抵是因为各种共识算法存在的弊端，POW耗财耗电，POS又有悖于完全去中心化的初衷，易被“大鳄”控制，小散的积极性不高； algorand是一种新的方案，它类似于当前新股申购的中签方式（抽签），让人人都有机会发布区块链；当然它解决了很多其它问题，比如怎样防止adversary的攻击… algorand的最终目的就是尽可能做">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-11-22T12:01:05.076Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="algorand">
+<meta name="twitter:description" content="​    现在区块链饱受诟病并一直不被大众接收，除了难以理解之外，其自身原因大抵是因为各种共识算法存在的弊端，POW耗财耗电，POS又有悖于完全去中心化的初衷，易被“大鳄”控制，小散的积极性不高； algorand是一种新的方案，它类似于当前新股申购的中签方式（抽签），让人人都有机会发布区块链；当然它解决了很多其它问题，比如怎样防止adversary的攻击… algorand的最终目的就是尽可能做">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/algorand/"/>
+
+
+
+
+
+  <title>algorand | Coolguyinhust</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Coolguyinhust</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">KaiXin</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/algorand/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="KaiXin Xiong">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/img/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coolguyinhust">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">algorand</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-22T17:10:45+08:00">
+                2018-11-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>​    现在区块链饱受诟病并一直不被大众接收，除了难以理解之外，其自身原因大抵是因为各种共识算法存在的弊端，POW耗财耗电，POS又有悖于完全去中心化的初衷，易被“大鳄”控制，小散的积极性不高；</p>
+<p>algorand是一种新的方案，它类似于当前新股申购的中签方式（抽签），让人人都有机会发布区块链；当然它解决了很多其它问题，比如怎样防止adversary的攻击…</p>
+<p>algorand的最终目的就是尽可能做到<strong>完全随机</strong>。</p>
+<p>简单来说，就是每个节点在一轮中的每个step,都得到一个随机数（用的是VRF可验证函数），如果随机数满足要求，则成为verifier。（在step=1时，verifier和potential leader一致；）</p>
+<h1 id="BA"><a href="#BA" class="headerlink" title="BA*"></a>BA*</h1><p>下面介绍一下BA*共识：</p>
+<p>假设：消息接收的时延有限；</p>
+<p>​        每一个step中 honest verifiers&gt;=2/3 verifiers；</p>
+<p>​        r是第几轮，s是第几步；Qr是r轮的种子；</p>
+<p>​        vi表示H(leader,block),即能验证是某个leader发出的block</p>
+<h2 id="step1"><a href="#step1" class="headerlink" title="step1 :"></a>step1 :</h2><p>对0和1之间的一个数，0.H(SIGi(r,s,Qr-1))≤p1发生的概率为p1，称所有满足此条件的用户为“potential leader”（也是这一步的“验证者”）。p使得以1-10^-18的概率，在所有“潜在领导者”中，至少有一个是诚实的。</p>
+<p>potential leader生成自己的区块和signed message，签名完后销毁自己的密钥（即使敌手控制了该potential leader，也无法让他发送新的message）；并广播block和message；</p>
+<h2 id="step2："><a href="#step2：" class="headerlink" title="step2："></a>step2：</h2><p>verifiers从收到的msg(r,1)里面，找到最小的那个值，把那个当成leader，检查合法性；广播msg(r,2)；</p>
+<h2 id="step3："><a href="#step3：" class="headerlink" title="step3："></a>step3：</h2><p>收到的msg(r,2)中，如果有超过2/3的消息的vi相同，广播msg(r,3)</p>
+<h2 id="step4"><a href="#step4" class="headerlink" title="step4:"></a>step4:</h2><p>收到的msg(r,3)中，</p>
+<p>​    如果有超过2/3的消息的vi相同，令bi=0;(表示“我”认为区块有效)；</p>
+<p>​    超过1/3的vi相同且vi存在，令vi=v，bi=1;</p>
+<p>​    否则，令vi=null，bi=1;</p>
+<p>广播msg(r,4)=（signed(bi),signed(vi)）;</p>
+<h2 id="step4之后进入循环验证阶段："><a href="#step4之后进入循环验证阶段：" class="headerlink" title="step4之后进入循环验证阶段："></a>step4之后进入循环验证阶段：</h2><p>核心：bi为0还是1的数量谁先超过2/3；</p>
+<p>0先超过2/3，表示生成区块有效；————ending condition 0</p>
+<p>1先超过2/3，区块为空；————————-ending condition 1</p>
+<p>在每个step s（s&gt;=5且s&lt;m）中，</p>
+<ol>
+<li>(s-2)mod 3==0，如果触发Ending Condition 0 或 1，则停止；否则等待ts后，收到的msg(r,s-1)中有超过2/3的bi是1，则将自己的bi置为1；否则置为0；</li>
+<li>(s-2)mod 3==1，如果触发Ending Condition 0 或 1，则停止；否则等待ts后，收到的msg(r,s-1)中有超过2/3的bi是0，则将自己的bi置为0；否则置为1；</li>
+<li>(s-2)mod 3==2，如果触发Ending Condition 0 或 1，则停止；否则等待ts后，收到的msg(r,s-1)中有超过2/3的bi是1，则将自己的bi置为1；收到的msg(r,s-1)中有超过2/3的bi是0，则将自己的bi置为0；否则，随机地置为0或1；</li>
+</ol>
+<p>如果s&lt;m前没有触发ending comdition，则区块也置为空。</p>
+<p>进行多次循环的原因：</p>
+<p>拜占庭共识要保证参与共识的诚实节点大于2/3，但随机选出的集合不能保证该条件。于是</p>
+<ol>
+<li>进行多次的随机选取（循环），只要有一次参与共识的诚实节点大于 2/3，就能达成共识。</li>
+<li>如果不进行多次随机选取（循环），则恶意节点每次把合法区块变成空区块的概率就会大大增加。</li>
+</ol>
+<p>参考：<a href="https://zhuanlan.zhihu.com/p/32282367" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/32282367</a></p>
+<h1 id="VRF可验证随机函数简介"><a href="#VRF可验证随机函数简介" class="headerlink" title="VRF可验证随机函数简介"></a>VRF可验证随机函数简介</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">//想得到结果result，需要secret和info，要验证result，也需要secret和info;</span></span><br><span class="line"> <span class="comment">//也就是说需要知道secret才能验证info和result是否对应匹配。</span></span><br><span class="line"><span class="keyword">long</span> result=SHA256(secret,info);</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Node</span></span>&#123;</span><br><span class="line">    <span class="keyword">long</span> result = VRF_Hash（SK，info）;</span><br><span class="line">	<span class="keyword">long</span> proof = VRF_Proof（SK，info）;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">send_to_verifier</span><span class="params">(<span class="keyword">long</span> result,<span class="keyword">long</span> proof)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Verifier</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">verifiy</span><span class="params">(<span class="keyword">long</span> result,<span class="keyword">long</span> proof)</span></span>&#123;</span><br><span class="line">       <span class="keyword">if</span>(result == VRF_P2H(proof))&#123;<span class="comment">//确保proof与result匹配</span></span><br><span class="line">			<span class="keyword">long</span> PK=getPK(node);</span><br><span class="line">            <span class="keyword">long</span> info=getInfo(node);</span><br><span class="line">           	<span class="keyword">boolean</span> VRF=VRF_Verify(PK, info, proof)</span><br><span class="line">            <span class="keyword">return</span> VRF;<span class="comment">/*确保proof和info匹配，从而推导出info和										result是否对应匹配，证明者给出的材料是否有问题。*/</span></span><br><span class="line">       &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在整个操作流程中，node始终没有出示自己的私钥SK，verifier却可以推导出info和result是否对应匹配，这就是VRF的妙用!</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/区块链/" rel="tag"># 区块链</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/com-net2/" rel="next" title="计算机网络复习（二）">
+                <i class="fa fa-chevron-left"></i> 计算机网络复习（二）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/img/avatar.jpg"
+                alt="KaiXin Xiong" />
+            
+              <p class="site-author-name" itemprop="name">KaiXin Xiong</p>
+              <p class="site-description motion-element" itemprop="description">know my way ,then do my wishes!</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/coolguyinhust" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="coolguyinhust6699@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/SoP_KaiXinHaHa/" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i>CSDN</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#BA"><span class="nav-number">1.</span> <span class="nav-text">BA*</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#step1"><span class="nav-number">1.1.</span> <span class="nav-text">step1 :</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#step2："><span class="nav-number">1.2.</span> <span class="nav-text">step2：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#step3："><span class="nav-number">1.3.</span> <span class="nav-text">step3：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#step4"><span class="nav-number">1.4.</span> <span class="nav-text">step4:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#step4之后进入循环验证阶段："><span class="nav-number">1.5.</span> <span class="nav-text">step4之后进入循环验证阶段：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#VRF可验证随机函数简介"><span class="nav-number">2.</span> <span class="nav-text">VRF可验证随机函数简介</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">KaiXin Xiong</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+	<div class="powered-by">
+	<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+	  本站访客数: <span id="busuanzi_value_site_uv"></span>
+	</span>
+	</div>
+  <span class="post-meta-divider">  | </span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共31.1k字</span>
+</div>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+	
+		<script type="text/javascript"
+		color="0,0,255" opacity='0.7' zIndex="-2" count="99" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+	
+</body>
+</html>

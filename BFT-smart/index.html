@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<script>
+    (function(){
+        if(''){
+            if (prompt('请输入文章密码') !== ''){
+                alert('密码错误');
+                history.back();
+            }
+        }
+    })();
+</script>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="paper," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="PBFT在学习BFT-SMR之前。我们一定要把pbft的流程搞清楚，主要是看backup节点如何就primary节点排好序的交易序列达成一致； 定义一个quorum为至少包含2f+1个replicas的集合。 checkpoint：  我们一连执行了K条请求，在第K条请求执行完时，向全网发起广播，告诉大家它已经将这K条执行完毕，要是大家反馈说这K条我们也执行完毕了，那就可以删除这K条的信息了，接下">
+<meta name="keywords" content="paper">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BFT_smart">
+<meta property="og:url" content="http://yoursite.com/BFT-smart/index.html">
+<meta property="og:site_name" content="Coolguyinhust">
+<meta property="og:description" content="PBFT在学习BFT-SMR之前。我们一定要把pbft的流程搞清楚，主要是看backup节点如何就primary节点排好序的交易序列达成一致； 定义一个quorum为至少包含2f+1个replicas的集合。 checkpoint：  我们一连执行了K条请求，在第K条请求执行完时，向全网发起广播，告诉大家它已经将这K条执行完毕，要是大家反馈说这K条我们也执行完毕了，那就可以删除这K条的信息了，接下">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/BFT-smart/q2.jpg">
+<meta property="og:updated_time" content="2018-10-28T06:24:36.523Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="BFT_smart">
+<meta name="twitter:description" content="PBFT在学习BFT-SMR之前。我们一定要把pbft的流程搞清楚，主要是看backup节点如何就primary节点排好序的交易序列达成一致； 定义一个quorum为至少包含2f+1个replicas的集合。 checkpoint：  我们一连执行了K条请求，在第K条请求执行完时，向全网发起广播，告诉大家它已经将这K条执行完毕，要是大家反馈说这K条我们也执行完毕了，那就可以删除这K条的信息了，接下">
+<meta name="twitter:image" content="http://yoursite.com/BFT-smart/q2.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/BFT-smart/"/>
+
+
+
+
+
+  <title>BFT_smart | Coolguyinhust</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Coolguyinhust</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">KaiXin</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/BFT-smart/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="KaiXin Xiong">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/img/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coolguyinhust">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">BFT_smart</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-19T20:26:39+08:00">
+                2018-10-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/blockchain/" itemprop="url" rel="index">
+                    <span itemprop="name">区块链</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="PBFT"><a href="#PBFT" class="headerlink" title="PBFT"></a>PBFT</h1><p>在学习BFT-SMR之前。我们一定要把pbft的流程搞清楚，主要是看backup节点如何就primary节点排好序的交易序列达成一致；</p>
+<p>定义一个<strong>quorum</strong>为至少包含2f+1个replicas的集合。</p>
+<p><strong>checkpoint： </strong> 我们一连执行了K条请求，在第K条请求执行完时，向全网发起广播，告诉大家它已经将这K条执行完毕，要是大家反馈说这K条我们也执行完毕了，那就可以删除这K条的信息了，接下来再执行K条，完成后再发起一次广播，即每隔K条发起一次全网共识，这个概念叫checkpoint，每隔K条去征求一下大家的意见，要是获得了大多数的认同（a quorum certificate with 2 f + 1 CHECKPOINT messages (including its own)），就形成了一个 <strong>stable checkpoint</strong>（记录在第K条的编号），我们也说该replica拥有了一个stable certificate就可以删除这K条请求的信息了。 </p>
+<p><strong>Q:PREPARE阶段与COMMIT阶段的本质不同是什么？</strong></p>
+<p><strong>A:</strong> </p>
+<ul>
+<li>PREPARE phase ensures fault-tolerant consistent ordering of requests <strong>within views</strong></li>
+<li>COMMIT phase ensures fault-tolerant consistent ordering of requests <strong>across views</strong></li>
+</ul>
+<p>PBFT场景：</p>
+<p>有两个客户A , B；模拟A向B转账10bitcoin的流程。假设有10个replica编号（0~9）,其中有3个恶意的replica（编号为1，3，5）</p>
+<p>A首先会发送一条加密的message给leader replica ,这条message会被leader replica节点排序，我们可以把排完序的区块叫做ordered block （b1）；leader replica会把b1进行多路广播，不妨假设9个replicas都收到了b1，replica2收到b1后会对这个区块进行验证，来检验leader是不是认真的把这个区块排好序了；当确认b1无误之后，replica2就会发送一则PREPARE消息，表示我认为这个区块没有问题；但是毕竟确认交易不是你一个人说了算（何况你replica2收到的b1含有的交易可能有假），还要等其它的replica的PREPARE消息；replica2发出PREPARE没多久，就收到了4，6，7，8，9，0（应该包含leader节点？）的PREPARE消息，replica2很开心，因为它知道，多数节点已经认同了b1的合法性，但此时还不能记账；因为如果这是发生view change，replica2已经记完账，进入下一阶段，此时4可能还并没有来得及记账（异步网络中没有收到足够的PREPARE消息），但已经进入了新的view，就失去了对b1的判断；所以，知道多数节点认同这个排序后后，发送COMMIT，当收到了4，6，7，8，9，0的COMMIT消息后，就说该节点拥有了一个叫<strong>committed certificate</strong>的证书，请求在这个节点上达到了<strong>committed</strong>状态，才能记账！</p>
+<p>当发生view-change后，系统会回退到最近的checkpoint 把之后的所有请求全部重新共识一遍  但是如果有消息在此前<strong>已经进入commit阶段了</strong> 就直接提交不需要重新做；这个阶段的view v+1能接受上一个view v中的COMMIT阶段的COMMIT信息。</p>
+<p>比如一开始在view 0中，共有req 0， req 1， req2三个请求依次进入了commit阶段，假设没有坏节点，那么这四个replicas即将要依次执行者三条请求并返回给Client。但这时主节点问题导致view change的发生，view 0 变成 view 1，在新的view里，原本的req 0， req1， req2三条请求的序列被保留，作数。那些处于pre-prepare和prepare阶段的请求在view change发生后，在新的view里都将被遗弃，不作数。</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><blockquote>
+<p>BFT-SMART, a robust Javabased BFT SMR library which implements a protocol similar to PBFT.   BFT-SMART targets both high-performance in fault-free executions and correctness if faulty replicas exhibit arbitrary behavior. Besides its robustness, BFT-SMART is the first BFT SMR library to support reconfigurations of the replica set  and to provide efficient and transparent support for durable services .</p>
+</blockquote>
+<h1 id="BFT-SMART-DESIGN"><a href="#BFT-SMART-DESIGN" class="headerlink" title="BFT-SMART DESIGN"></a>BFT-SMART DESIGN</h1><h2 id="Design-Principles"><a href="#Design-Principles" class="headerlink" title="Design Principles"></a>Design Principles</h2><ul>
+<li><p>Tunable fault model 可调故障模型</p>
+<p>​    消息可能延迟，掉线甚至损坏；</p>
+<p>​    流程可能异常，并且造假；</p>
+<p>​    BFT-SMART通过提供加密签名容忍malicious Byzantine faults，SMR协议容忍崩溃和消息损坏。</p>
+</li>
+<li><p>Simplicity: 尽量简单，让代码方便部署</p>
+</li>
+<li><p>Modularity </p>
+</li>
+<li><p>Simple and Extensible Application Programming Interface</p>
+</li>
+<li><p>Multi-core awareness 多核意识</p>
+<p>​    BFT-SMART利用无处不在的多核服务器架构来改进协议关键路径上的一些昂贵的处理任务。 特别是，我们使系统吞吐量随着副本支持的硬件线程数量而变化，特别是在启用签名并且需要更多计算能力进行验证时。</p>
+</li>
+</ul>
+<h2 id="System-Model"><a href="#System-Model" class="headerlink" title="System Model"></a>System Model</h2><blockquote>
+<p>Crash Faults are the faults that makes the system halt/crash, simple enough.<br>Byzantine faults are way more complex, since you can have all faults that can cause a crash fault to occur, malicious faults and arbritrary fauls all in one category.</p>
+<p>Byzantine faults are usually only relevant for distributed systems, since this is the only type of systems that could be influenced as a whole by a malicious response - also, it is on the agreement phase of a distributed system that byzantine faults are handled most of the times.<br>When you consider tolerating byzantine faults, you are considering malicious and arbitrary faults, meaning the nodes of your system should not trust each other or themselves.  </p>
+</blockquote>
+<p>n&gt;3f 能容忍f个拜占庭节点</p>
+<p>n&gt;2f 容忍f个crash faults 节点</p>
+<h2 id="Core-Protocols"><a href="#Core-Protocols" class="headerlink" title="Core Protocols"></a>Core Protocols</h2><ol>
+<li><p>全序广播：clients把requests提交到replicas并等待答复；   </p>
+<p>Total order is achieved through a sequence of consensus instances, each of them deciding a<br>batch of client requests.</p>
+</li>
+<li><p>状态转移 ：a new leader is elected for the consensus primitive and replicas are forced to “jump” to the same consensus instance. This jump might make some replicas trigger the<br>state transfer protocol</p>
+</li>
+<li><p>Reconfiguration： enables replicas to be added or removed from the system on-the-fly.</p>
+</li>
+</ol>
+<h1 id="Implementation"><a href="#Implementation" class="headerlink" title="Implementation"></a>Implementation</h1><img src="/BFT-smart/q2.jpg">
+<p>一个replica中并行了许多这样的thread，sender threads,receiver threads..来提高发送和接受消息的效率，最后push到decide queue中来执行这些message；</p>
+<p>客户端的请求放进一个叫Netty Thread Pool的线程池中，这样能让client-replicas的连接高效率；</p>
+<p>client message一被接收，先判断是否ordered：对于unordered requests(一般认为是只读指令)，直接传到service implementation;对于ordered ，会被送到client manager. </p>
+<p>proposer thread只在leader replica中， 负责收集请求（收集到不能再收为止）并传输PROPOSE message；</p>
+<p>从一个replica发送到另外一个replica的message m，sender thread从out queue中得到m，在接受replica中，receiver thread读取m并放进in queue；</p>
+<p>message processor thread负责检查in queue中的messages，得到了其它节点的确认的message就加入decided queue,delivery thread will deliver totally ordered requests to the application.</p>
+<h2 id="源码阅读"><a href="#源码阅读" class="headerlink" title="源码阅读"></a>源码阅读</h2><p>真正到阅读源码的时候，才意识到<strong>数据结构()、IO流，</strong>的知识的重要性。</p>
+<p>比如看到hashmap,hashset;首先想到他们底层的数据结构用的是数组链表，通过hashcode来替代遍历找到元素，其中hashmap的key,value是存储在一起的，即一个entry。要保证key的唯一性，先算hashcode找到桶的位置，如果两个对象的hashCode不同，那么equals一定为 false；否则，如果其hashCode相同，equals也不一定为 true；所以我们还要调用equal()方法比较key;这样就保证了key的唯一性,直接替换value.</p>
+<ol>
+<li>javadoc</li>
+<li>tree /f 得目录树</li>
+<li>了解各模块功能</li>
+</ol>
+<p>library\src\bftsmart下，</p>
+<p>执行  <code>dir /b</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">clientsmanagement</span><br><span class="line">communication</span><br><span class="line">consensus</span><br><span class="line">demo</span><br><span class="line">reconfiguration</span><br><span class="line">statemanagement</span><br><span class="line">tom</span><br></pre></td></tr></table></figure>
+<p>得到以上的模块。</p>
+<p>TOM：（ Total Order Multicast ）：消息流的处理模块。</p>
+<p>消息的发送，传播，接收；对消息进行加密，验证；消息的存储，恢复，持久化；</p>
+<h4 id="timeout"><a href="#timeout" class="headerlink" title="timeout"></a>timeout</h4><p>这一小节主要是为了研究在异步网络中，如何动态调节timeout参数，来应对不同延时的影响。</p>
+<p>timeout在以下4个包定义：</p>
+<p>bftsmart.tom.leaderchange的</p>
+<p>RequestsTimer类中：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">long</span> timeout;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">long</span> shortTimeout;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>This thread serves as a manager for all timers of pending requests.<br>此线程充当所有未决请求计时器的管理器。</p>
+</blockquote>
+<p>构造函数长这个样子：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">RequestsTimer</span><span class="params">(TOMLayer tomLayer, ServerCommunicationSystem communication, ServerViewController controller)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.tomLayer = tomLayer;</span><br><span class="line">    <span class="keyword">this</span>.communication = communication;</span><br><span class="line">    <span class="keyword">this</span>.controller = controller;</span><br><span class="line"><span class="comment">//timeout的初始化，从控制器中直接得到配置的参数</span></span><br><span class="line">    <span class="keyword">this</span>.timeout = <span class="keyword">this</span>.controller.getStaticConf().getRequestTimeout();</span><br><span class="line">    <span class="keyword">this</span>.shortTimeout = -<span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>bftsmart.tom.core.messages</p>
+<p>TOMMessage类中：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">transient</span> <span class="keyword">boolean</span> timeout = <span class="keyword">false</span>;<span class="comment">//this message was timed out?</span></span><br></pre></td></tr></table></figure>
+<p>bftsmart.statemanagement.strategy.durability.DurableStateManager和</p>
+<p>bftsmart.statemanagement.strategy.StandardStateManager中timeout的用法是一样的</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stateTimeout</span><span class="params">()</span> </span>&#123;</span><br><span class="line">       lockTimer.lock();</span><br><span class="line">       logger.debug(<span class="string">"Timeout for the replica that was supposed to send the complete state. Changing desired replica."</span>);</span><br><span class="line">       <span class="keyword">if</span> (stateTimer != <span class="keyword">null</span>)</span><br><span class="line">       	stateTimer.cancel();</span><br><span class="line">       changeReplica();</span><br><span class="line">       reset();</span><br><span class="line">       </span><br><span class="line">       requestState();</span><br><span class="line">       </span><br><span class="line">       lockTimer.unlock();</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">requestState</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (tomLayer.requestsTimer != <span class="keyword">null</span>)</span><br><span class="line">        	tomLayer.requestsTimer.clearAll();</span><br><span class="line"></span><br><span class="line">        changeReplica(); <span class="comment">// always ask the complete state to a different replica</span></span><br><span class="line">        </span><br><span class="line">        SMMessage smsg = <span class="keyword">new</span> StandardSMMessage(SVController.getStaticConf().getProcessId(),</span><br><span class="line">                waitingCID, TOMUtil.SM_REQUEST, replica, <span class="keyword">null</span>, <span class="keyword">null</span>, -<span class="number">1</span>, -<span class="number">1</span>);</span><br><span class="line">        tomLayer.getCommunication().send(SVController.getCurrentViewOtherAcceptors(), smsg);</span><br><span class="line"></span><br><span class="line">        logger.info(<span class="string">"I just sent a request to the other replicas for the state up to CID "</span> + waitingCID);</span><br><span class="line"></span><br><span class="line">        TimerTask stateTask =  <span class="keyword">new</span> TimerTask() &#123;</span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            	logger.info(<span class="string">"Timeout to retrieve state"</span>);</span><br><span class="line">                <span class="keyword">int</span>[] myself = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">1</span>];</span><br><span class="line">                myself[<span class="number">0</span>] = SVController.getStaticConf().getProcessId();</span><br><span class="line">                tomLayer.getCommunication().send(myself, <span class="keyword">new</span> StandardSMMessage(-<span class="number">1</span>, waitingCID, TOMUtil.TRIGGER_SM_LOCALLY, -<span class="number">1</span>, <span class="keyword">null</span>, <span class="keyword">null</span>, -<span class="number">1</span>, -<span class="number">1</span>));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        stateTimer = <span class="keyword">new</span> Timer(<span class="string">"state timer"</span>);</span><br><span class="line">        timeout = timeout * <span class="number">2</span>;</span><br><span class="line">        stateTimer.schedule(stateTask,timeout);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>bftsmart.reconfiguration的ServerViewController类中</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tomLayer.requestsTimer.stopTimer();</span><br><span class="line">tomLayer.requestsTimer.setShortTimeout(<span class="number">3000</span>);</span><br><span class="line">tomLayer.requestsTimer.startTimer();</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/paper/" rel="tag"># paper</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/reputation-for-consensus/" rel="next" title="reputation for consensus">
+                <i class="fa fa-chevron-left"></i> reputation for consensus
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/message-queue/" rel="prev" title="消息服务与message_queue">
+                消息服务与message_queue <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/img/avatar.jpg"
+                alt="KaiXin Xiong" />
+            
+              <p class="site-author-name" itemprop="name">KaiXin Xiong</p>
+              <p class="site-description motion-element" itemprop="description">know my way ,then do my wishes!</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/coolguyinhust" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="coolguyinhust6699@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/SoP_KaiXinHaHa/" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i>CSDN</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#PBFT"><span class="nav-number">1.</span> <span class="nav-text">PBFT</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#正文"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#BFT-SMART-DESIGN"><span class="nav-number">3.</span> <span class="nav-text">BFT-SMART DESIGN</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Design-Principles"><span class="nav-number">3.1.</span> <span class="nav-text">Design Principles</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#System-Model"><span class="nav-number">3.2.</span> <span class="nav-text">System Model</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Core-Protocols"><span class="nav-number">3.3.</span> <span class="nav-text">Core Protocols</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Implementation"><span class="nav-number">4.</span> <span class="nav-text">Implementation</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#源码阅读"><span class="nav-number">4.1.</span> <span class="nav-text">源码阅读</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#timeout"><span class="nav-number">4.1.0.1.</span> <span class="nav-text">timeout</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">KaiXin Xiong</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+	<div class="powered-by">
+	<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+	  本站访客数: <span id="busuanzi_value_site_uv"></span>
+	</span>
+	</div>
+  <span class="post-meta-divider">  | </span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共31.1k字</span>
+</div>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+	
+		<script type="text/javascript"
+		color="0,0,255" opacity='0.7' zIndex="-2" count="99" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+	
+</body>
+</html>
